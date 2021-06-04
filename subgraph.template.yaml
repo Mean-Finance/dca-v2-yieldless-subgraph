@@ -1,0 +1,31 @@
+specVersion: 0.0.3
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Factory
+    network: {{network}}
+    source:
+      startBlock: {{startBlock}}
+      address: '{{Factory}}'
+      abi: Factory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Factory
+        - Pair
+        - Transaction
+        - Token
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+        - name: Pair
+          file: ./abis/Pair.json
+        - name: ERC20
+          file: ./abis/ERC20Detailed.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address)
+          handler: handlePairCreated
+      file: ./src/mappings/factory.ts

@@ -1,0 +1,47 @@
+{
+  "name": "dca-subgraph",
+  "version": "0.0.0",
+  "license": "",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build:kovan": "yarn prepare:kovan && graph build",
+    "build:rinkeby": "yarn prepare:rinkeby && graph build",
+    "build:mainnet": "yarn prepare:mainnet && graph build",
+    "thegraph:deploy:kovan": "yarn build:kovan && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-kovan",
+    "thegraph:deploy:rinkeby": "yarn build:rinkeby && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-rinkeby",
+    "thegraph:deploy:mainnet": "yarn build:mainnet && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-mainnet",
+    "prepare:kovan": "mustache config/kovan.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:rinkeby": "mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
+    "deploy:kovan": "yarn prepare:kovan && yarn build:kovan && yarn thegraph:deploy:kovan",
+    "deploy:rinkeby": "yarn prepare:rinkeby && yarn build:rinkeby && yarn thegraph:deploy:rinkeby",
+    "release": "standard-version",
+    "deploy:mainnet": "yarn prepare:mainnet && yarn build:mainnet && yarn thegraph:deploy:mainnet",
+    "lint:check": "prettier --check './**'",
+    "lint:fix": "sort-package-json && prettier --write './**'",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.20.1",
+    "@graphprotocol/graph-ts": "0.20.0",
+    "mustache": "4.2.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "12.1.4",
+    "@commitlint/config-conventional": "12.1.4",
+    "husky": "6.0.0",
+    "pinst": "2.1.6",
+    "prettier": "2.3.1",
+    "sort-package-json": "1.50.0",
+    "standard-version": "9.3.0"
+  },
+  "authors": [
+    {
+      "name": "Alejo Amiras",
+      "email": "alejo.amiras@gmail.com",
+      "url": "https://github.com/alejoamiras"
+    }
+  ]
+}

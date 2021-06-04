@@ -1,0 +1,79 @@
+type DCAGlobalParameters @entity {
+  "address"
+  id: ID!
+  "fee recipient"
+  feeRecipient: Bytes!
+  # "nft descriptor"
+  nftDescriptor: NFTDescriptor!
+  "swap fee"
+  swapFee: Int!
+  "loan fee"
+  loanFee: Int!
+  "fee precision"
+  feePrecision: Int!
+  "max fee"
+  maxFee: Int!
+  "intervals"
+  allowedIntervals: [SwapInterval]!
+}
+
+type SwapInterval @entity {
+  "tx.hash-added"
+  id: ID!
+  "interval"
+  interval: Int!
+  "description"
+  description: String!
+}
+
+type NFTDescriptor @entity {
+  "address"
+  id: ID!
+}
+
+type DCAPair @entity {
+  "address"
+  id: ID!
+  "token0"
+  token0: Bytes!
+  "token1"
+  token1: Bytes!
+}
+
+type Transaction @entity {
+  "transaction.hash-transaction.index"
+  id: ID!
+  "The event name / call stacktrace"
+  event: String!
+  "The transaction sender"
+  from: Bytes!
+  "Gas price used in the transaction"
+  gasPrice: BigInt!
+  "Gas sent used in the transaction"
+  gasSent: BigInt!
+  "Transaction hash"
+  hash: Bytes!
+  "The transaction index"
+  index: BigInt!
+  "Address that received the transaction"
+  to: Bytes!
+  "Ether value sent in the transaction"
+  value: BigInt!
+  "Timestamp when the transaction was executed"
+  timestamp: BigInt!
+  "Gas limit used in the transaction"
+  gasLimit: BigInt!
+  "Block number"
+  blockNumber: BigInt!
+}
+
+type Token @entity {
+  "Token address"
+  id: ID!
+  "Number of decimals for this Token"
+  decimals: Int!
+  "Name of the Token"
+  name: String!
+  "Symbol of the Token"
+  symbol: String!
+}
