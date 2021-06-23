@@ -96,12 +96,12 @@ export class DCAGlobalParameters extends Entity {
     this.set("MAX_FEE", Value.fromBigInt(value));
   }
 
-  get allowedIntervals(): Array<string | null> {
+  get allowedIntervals(): Array<string> {
     let value = this.get("allowedIntervals");
     return value.toStringArray();
   }
 
-  set allowedIntervals(value: Array<string | null>) {
+  set allowedIntervals(value: Array<string>) {
     this.set("allowedIntervals", Value.fromStringArray(value));
   }
 }
@@ -152,6 +152,15 @@ export class SwapInterval extends Entity {
 
   set description(value: string) {
     this.set("description", Value.fromString(value));
+  }
+
+  get dcaGlobalParameters(): string {
+    let value = this.get("dcaGlobalParameters");
+    return value.toString();
+  }
+
+  set dcaGlobalParameters(value: string) {
+    this.set("dcaGlobalParameters", Value.fromString(value));
   }
 }
 

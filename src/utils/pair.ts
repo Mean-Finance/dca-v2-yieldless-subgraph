@@ -10,6 +10,7 @@ export function getOrCreate(event: PairCreated, transaction: Transaction): DCAPa
     pair = new DCAPair(id);
     pair.token0 = event.params._token0;
     pair.token1 = event.params._token1;
+    pair.save();
   }
   return pair!;
 }
