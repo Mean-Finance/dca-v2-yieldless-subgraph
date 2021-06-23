@@ -1,5 +1,7 @@
 {
-  "startBlock": "25635748",
   "network": "kovan",
-  "Factory": "0xa55E3d0E2Ad549D4De687B57b8598e108D65EbA9"
+  "factoryStartBlock": "25635748",
+  "factory": "0xa55E3d0E2Ad549D4De687B57b8598e108D65EbA9",
+  "globalParametersStartBlock": "25635746",
+  "globalParameters": "0xEDA4E02E5C7c722503C2D0696613F66ce8E36d23"
 }

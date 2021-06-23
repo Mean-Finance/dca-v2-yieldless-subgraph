@@ -10,7 +10,7 @@
     "thegraph:deploy:kovan": "yarn build:kovan && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-kovan",
     "thegraph:deploy:rinkeby": "yarn build:rinkeby && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-rinkeby",
     "thegraph:deploy:mainnet": "yarn build:mainnet && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-mainnet",
-    "prepare:kovan": "mustache config/kovan.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:kovan": "yarn codegen && mustache config/kovan.json subgraph.template.yaml > subgraph.yaml",
     "prepare:rinkeby": "mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
     "deploy:kovan": "yarn prepare:kovan && yarn build:kovan && yarn thegraph:deploy:kovan",

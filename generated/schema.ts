@@ -60,22 +60,22 @@ export class DCAGlobalParameters extends Entity {
     this.set("nftDescriptor", Value.fromBytes(value));
   }
 
-  get swapFee(): i32 {
+  get swapFee(): BigInt {
     let value = this.get("swapFee");
-    return value.toI32();
+    return value.toBigInt();
   }
 
-  set swapFee(value: i32) {
-    this.set("swapFee", Value.fromI32(value));
+  set swapFee(value: BigInt) {
+    this.set("swapFee", Value.fromBigInt(value));
   }
 
-  get loanFee(): i32 {
+  get loanFee(): BigInt {
     let value = this.get("loanFee");
-    return value.toI32();
+    return value.toBigInt();
   }
 
-  set loanFee(value: i32) {
-    this.set("loanFee", Value.fromI32(value));
+  set loanFee(value: BigInt) {
+    this.set("loanFee", Value.fromBigInt(value));
   }
 
   get FEE_PRECISION(): i32 {
@@ -87,13 +87,13 @@ export class DCAGlobalParameters extends Entity {
     this.set("FEE_PRECISION", Value.fromI32(value));
   }
 
-  get MAX_FEE(): i32 {
+  get MAX_FEE(): BigInt {
     let value = this.get("MAX_FEE");
-    return value.toI32();
+    return value.toBigInt();
   }
 
-  set MAX_FEE(value: i32) {
-    this.set("MAX_FEE", Value.fromI32(value));
+  set MAX_FEE(value: BigInt) {
+    this.set("MAX_FEE", Value.fromBigInt(value));
   }
 
   get allowedIntervals(): Array<string | null> {

@@ -6,13 +6,13 @@ type DCAGlobalParameters @entity {
   # "nft descriptor"
   nftDescriptor: Bytes!
   "swap fee"
-  swapFee: Int!
+  swapFee: BigInt!
   "loan fee"
-  loanFee: Int!
+  loanFee: BigInt!
   "fee precision"
   FEE_PRECISION: Int!
   "max fee"
-  MAX_FEE: Int!
+  MAX_FEE: BigInt!
   "intervals"
   allowedIntervals: [SwapInterval]!
 }

@@ -1,8 +1,8 @@
-import { log, ethereum, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { log, ethereum, BigInt, Address } from '@graphprotocol/graph-ts';
 import { DCAGlobalParameters } from '../../generated/schema';
-import { GlobalParameters } from '../../generated/Factory/GlobalParameters';
+import { GlobalParameters } from '../../generated/GlobalParameters/GlobalParameters';
 
-export function getOrCreate(address: Bytes): DCAGlobalParameters {
+export function getOrCreate(address: Address): DCAGlobalParameters {
   let id = address.toHexString();
   log.debug('[GlobalParameters] Get or create {}', [id]);
   let globalParameters = DCAGlobalParameters.load(id);

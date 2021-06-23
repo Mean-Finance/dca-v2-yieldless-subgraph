@@ -6,8 +6,8 @@ dataSources:
     name: Factory
     network: {{network}}
     source:
-      startBlock: {{startBlock}}
-      address: '{{Factory}}'
+      startBlock: {{factoryStartBlock}}
+      address: '{{factory}}'
       abi: Factory
     mapping:
       kind: ethereum/events
@@ -15,14 +15,11 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/factory.ts
       entities:
-        - GlobalParameters
         - Factory
         - Pair
         - Transaction
         - Token
       abis:
-        - name: GlobalParameters
-          file: ./abis/GlobalParameters.json
         - name: Factory
           file: ./abis/Factory.json
         - name: Pair
@@ -32,3 +29,25 @@ dataSources:
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address)
           handler: handlePairCreated
+
+  - kind: ethereum/contract
+    name: GlobalParameters
+    network: {{network}}
+    source:
+      startBlock: {{globalParametersStartBlock}}
+      address: '{{globalParameters}}'
+      abi: GlobalParameters
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/global-parameters.ts
+      entities:
+        - GlobalParameters
+        - Transaction
+      abis:
+        - name: GlobalParameters
+          file: ./abis/GlobalParameters.json
+      eventHandlers:
+        - event: SwapIntervalsAllowed(uint32[],string[])
+          handler: handleSwapIntervalsAllowed
