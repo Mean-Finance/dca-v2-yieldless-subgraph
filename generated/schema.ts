@@ -51,13 +51,13 @@ export class DCAGlobalParameters extends Entity {
     this.set("feeRecipient", Value.fromBytes(value));
   }
 
-  get nftDescriptor(): string {
+  get nftDescriptor(): Bytes {
     let value = this.get("nftDescriptor");
-    return value.toString();
+    return value.toBytes();
   }
 
-  set nftDescriptor(value: string) {
-    this.set("nftDescriptor", Value.fromString(value));
+  set nftDescriptor(value: Bytes) {
+    this.set("nftDescriptor", Value.fromBytes(value));
   }
 
   get swapFee(): i32 {
@@ -78,22 +78,22 @@ export class DCAGlobalParameters extends Entity {
     this.set("loanFee", Value.fromI32(value));
   }
 
-  get feePrecision(): i32 {
-    let value = this.get("feePrecision");
+  get FEE_PRECISION(): i32 {
+    let value = this.get("FEE_PRECISION");
     return value.toI32();
   }
 
-  set feePrecision(value: i32) {
-    this.set("feePrecision", Value.fromI32(value));
+  set FEE_PRECISION(value: i32) {
+    this.set("FEE_PRECISION", Value.fromI32(value));
   }
 
-  get maxFee(): i32 {
-    let value = this.get("maxFee");
+  get MAX_FEE(): i32 {
+    let value = this.get("MAX_FEE");
     return value.toI32();
   }
 
-  set maxFee(value: i32) {
-    this.set("maxFee", Value.fromI32(value));
+  set MAX_FEE(value: i32) {
+    this.set("MAX_FEE", Value.fromI32(value));
   }
 
   get allowedIntervals(): Array<string | null> {
@@ -152,37 +152,6 @@ export class SwapInterval extends Entity {
 
   set description(value: string) {
     this.set("description", Value.fromString(value));
-  }
-}
-
-export class NFTDescriptor extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save NFTDescriptor entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save NFTDescriptor entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("NFTDescriptor", id.toString(), this);
-  }
-
-  static load(id: string): NFTDescriptor | null {
-    return store.get("NFTDescriptor", id) as NFTDescriptor | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
   }
 }
 

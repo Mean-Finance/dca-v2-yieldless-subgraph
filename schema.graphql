@@ -4,15 +4,15 @@ type DCAGlobalParameters @entity {
   "fee recipient"
   feeRecipient: Bytes!
   # "nft descriptor"
-  nftDescriptor: NFTDescriptor!
+  nftDescriptor: Bytes!
   "swap fee"
   swapFee: Int!
   "loan fee"
   loanFee: Int!
   "fee precision"
-  feePrecision: Int!
+  FEE_PRECISION: Int!
   "max fee"
-  maxFee: Int!
+  MAX_FEE: Int!
   "intervals"
   allowedIntervals: [SwapInterval]!
 }
@@ -24,11 +24,6 @@ type SwapInterval @entity {
   interval: Int!
   "description"
   description: String!
-}
-
-type NFTDescriptor @entity {
-  "address"
-  id: ID!
 }
 
 type DCAPair @entity {

@@ -13,12 +13,16 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
+      file: ./src/mappings/factory.ts
       entities:
+        - GlobalParameters
         - Factory
         - Pair
         - Transaction
         - Token
       abis:
+        - name: GlobalParameters
+          file: ./abis/GlobalParameters.json
         - name: Factory
           file: ./abis/Factory.json
         - name: Pair
@@ -28,4 +32,3 @@ dataSources:
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address)
           handler: handlePairCreated
-      file: ./src/mappings/factory.ts

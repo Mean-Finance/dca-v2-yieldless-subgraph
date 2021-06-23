@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "",
   "scripts": {
-    "codegen": "graph codegen",
+    "codegen": "rm -rf generated && graph codegen",
     "build:kovan": "yarn prepare:kovan && graph build",
     "build:rinkeby": "yarn prepare:rinkeby && graph build",
     "build:mainnet": "yarn prepare:mainnet && graph build",
