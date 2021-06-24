@@ -51,3 +51,30 @@ dataSources:
       eventHandlers:
         - event: SwapIntervalsAllowed(uint32[],string[])
           handler: handleSwapIntervalsAllowed
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: {{network}}
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/pair.ts
+      entities:
+        - Pair
+      abis:
+        - name: Pair
+          file: ./abis/Pair.json
+      eventHandlers:
+        - event: Deposited(indexed address,uint256,address,uint192,uint32,uint32,uint32)
+          handler: handleDeposited
+        - event: Modified(indexed address,uint256,uint192,uint32,uint32)
+          handler: handleModified
+        - event: Terminated(indexed address,uint256,uint256,uint256)
+          handler: handleTerminated
+        - event: Withdrew(indexed address,uint256,address,uint256)
+          handler: handleWithdrew
+        - event: WithdrewMany(indexed address,uint256[],uint256,uint256)
+          handler: handleWithdrewMany

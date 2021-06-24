@@ -12,7 +12,7 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class DCAGlobalParameters extends Entity {
+export class GlobalParameters extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -20,17 +20,17 @@ export class DCAGlobalParameters extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save DCAGlobalParameters entity without an ID");
+    assert(id !== null, "Cannot save GlobalParameters entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save DCAGlobalParameters entity with non-string ID. " +
+      "Cannot save GlobalParameters entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("DCAGlobalParameters", id.toString(), this);
+    store.set("GlobalParameters", id.toString(), this);
   }
 
-  static load(id: string): DCAGlobalParameters | null {
-    return store.get("DCAGlobalParameters", id) as DCAGlobalParameters | null;
+  static load(id: string): GlobalParameters | null {
+    return store.get("GlobalParameters", id) as GlobalParameters | null;
   }
 
   get id(): string {
@@ -42,40 +42,72 @@ export class DCAGlobalParameters extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get feeRecipient(): Bytes {
+  get feeRecipient(): Bytes | null {
     let value = this.get("feeRecipient");
-    return value.toBytes();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set feeRecipient(value: Bytes) {
-    this.set("feeRecipient", Value.fromBytes(value));
+  set feeRecipient(value: Bytes | null) {
+    if (value === null) {
+      this.unset("feeRecipient");
+    } else {
+      this.set("feeRecipient", Value.fromBytes(value as Bytes));
+    }
   }
 
-  get nftDescriptor(): Bytes {
+  get nftDescriptor(): Bytes | null {
     let value = this.get("nftDescriptor");
-    return value.toBytes();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set nftDescriptor(value: Bytes) {
-    this.set("nftDescriptor", Value.fromBytes(value));
+  set nftDescriptor(value: Bytes | null) {
+    if (value === null) {
+      this.unset("nftDescriptor");
+    } else {
+      this.set("nftDescriptor", Value.fromBytes(value as Bytes));
+    }
   }
 
-  get swapFee(): BigInt {
+  get swapFee(): BigInt | null {
     let value = this.get("swapFee");
-    return value.toBigInt();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set swapFee(value: BigInt) {
-    this.set("swapFee", Value.fromBigInt(value));
+  set swapFee(value: BigInt | null) {
+    if (value === null) {
+      this.unset("swapFee");
+    } else {
+      this.set("swapFee", Value.fromBigInt(value as BigInt));
+    }
   }
 
-  get loanFee(): BigInt {
+  get loanFee(): BigInt | null {
     let value = this.get("loanFee");
-    return value.toBigInt();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set loanFee(value: BigInt) {
-    this.set("loanFee", Value.fromBigInt(value));
+  set loanFee(value: BigInt | null) {
+    if (value === null) {
+      this.unset("loanFee");
+    } else {
+      this.set("loanFee", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get FEE_PRECISION(): i32 {
@@ -87,22 +119,21 @@ export class DCAGlobalParameters extends Entity {
     this.set("FEE_PRECISION", Value.fromI32(value));
   }
 
-  get MAX_FEE(): BigInt {
+  get MAX_FEE(): BigInt | null {
     let value = this.get("MAX_FEE");
-    return value.toBigInt();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set MAX_FEE(value: BigInt) {
-    this.set("MAX_FEE", Value.fromBigInt(value));
-  }
-
-  get allowedIntervals(): Array<string> {
-    let value = this.get("allowedIntervals");
-    return value.toStringArray();
-  }
-
-  set allowedIntervals(value: Array<string>) {
-    this.set("allowedIntervals", Value.fromStringArray(value));
+  set MAX_FEE(value: BigInt | null) {
+    if (value === null) {
+      this.unset("MAX_FEE");
+    } else {
+      this.set("MAX_FEE", Value.fromBigInt(value as BigInt));
+    }
   }
 }
 
@@ -136,13 +167,13 @@ export class SwapInterval extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get interval(): i32 {
+  get interval(): BigInt {
     let value = this.get("interval");
-    return value.toI32();
+    return value.toBigInt();
   }
 
-  set interval(value: i32) {
-    this.set("interval", Value.fromI32(value));
+  set interval(value: BigInt) {
+    this.set("interval", Value.fromBigInt(value));
   }
 
   get description(): string {
@@ -153,18 +184,9 @@ export class SwapInterval extends Entity {
   set description(value: string) {
     this.set("description", Value.fromString(value));
   }
-
-  get dcaGlobalParameters(): string {
-    let value = this.get("dcaGlobalParameters");
-    return value.toString();
-  }
-
-  set dcaGlobalParameters(value: string) {
-    this.set("dcaGlobalParameters", Value.fromString(value));
-  }
 }
 
-export class DCAPair extends Entity {
+export class Pair extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -172,17 +194,17 @@ export class DCAPair extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save DCAPair entity without an ID");
+    assert(id !== null, "Cannot save Pair entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save DCAPair entity with non-string ID. " +
+      "Cannot save Pair entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("DCAPair", id.toString(), this);
+    store.set("Pair", id.toString(), this);
   }
 
-  static load(id: string): DCAPair | null {
-    return store.get("DCAPair", id) as DCAPair | null;
+  static load(id: string): Pair | null {
+    return store.get("Pair", id) as Pair | null;
   }
 
   get id(): string {
@@ -194,22 +216,134 @@ export class DCAPair extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get token0(): Bytes {
+  get token0(): string {
     let value = this.get("token0");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set token0(value: Bytes) {
-    this.set("token0", Value.fromBytes(value));
+  set token0(value: string) {
+    this.set("token0", Value.fromString(value));
   }
 
-  get token1(): Bytes {
+  get token1(): string {
     let value = this.get("token1");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set token1(value: Bytes) {
-    this.set("token1", Value.fromBytes(value));
+  set token1(value: string) {
+    this.set("token1", Value.fromString(value));
+  }
+
+  get positions(): Array<string> {
+    let value = this.get("positions");
+    return value.toStringArray();
+  }
+
+  set positions(value: Array<string>) {
+    this.set("positions", Value.fromStringArray(value));
+  }
+}
+
+export class Position extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Position entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Position entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Position", id.toString(), this);
+  }
+
+  static load(id: string): Position | null {
+    return store.get("Position", id) as Position | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): string {
+    let value = this.get("from");
+    return value.toString();
+  }
+
+  set from(value: string) {
+    this.set("from", Value.fromString(value));
+  }
+
+  get to(): string {
+    let value = this.get("to");
+    return value.toString();
+  }
+
+  set to(value: string) {
+    this.set("to", Value.fromString(value));
+  }
+
+  get pair(): string {
+    let value = this.get("pair");
+    return value.toString();
+  }
+
+  set pair(value: string) {
+    this.set("pair", Value.fromString(value));
+  }
+
+  get swapInterval(): string {
+    let value = this.get("swapInterval");
+    return value.toString();
+  }
+
+  set swapInterval(value: string) {
+    this.set("swapInterval", Value.fromString(value));
+  }
+
+  get status(): string {
+    let value = this.get("status");
+    return value.toString();
+  }
+
+  set status(value: string) {
+    this.set("status", Value.fromString(value));
+  }
+
+  get transaction(): string {
+    let value = this.get("transaction");
+    return value.toString();
+  }
+
+  set transaction(value: string) {
+    this.set("transaction", Value.fromString(value));
+  }
+
+  get createdAtBlock(): BigInt {
+    let value = this.get("createdAtBlock");
+    return value.toBigInt();
+  }
+
+  set createdAtBlock(value: BigInt) {
+    this.set("createdAtBlock", Value.fromBigInt(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
   }
 }
 

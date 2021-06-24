@@ -6,7 +6,7 @@ const DEFAULT_DECIMALS = 18;
 
 export function getOrCreate(address: Address): Token {
   let id = address.toHexString();
-  log.debug('[Token] Get or create {}', [id]);
+  log.warning('[Token] Get or create {}', [id]);
   let token = Token.load(id);
   if (token === null) {
     token = new Token(id);

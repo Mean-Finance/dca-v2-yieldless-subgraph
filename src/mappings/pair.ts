@@ -1,0 +1,28 @@
+import * as transactionLibrary from '../utils/transaction';
+import * as positionLibrary from '../utils/position';
+import { Deposited, Modified, Terminated, Withdrew, WithdrewMany } from '../../generated/Factory/Pair';
+
+export function handleDeposited(event: Deposited): void {
+  let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Deposited');
+  positionLibrary.getOrCreate(event, transaction);
+}
+
+export function handleModified(event: Modified): void {
+  let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Modified');
+  // positionLibrary.getOrCreate(event, transaction);
+}
+
+export function handleTerminated(event: Terminated): void {
+  let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Terminated');
+  // positionLibrary.getOrCreate(event, transaction);
+}
+
+export function handleWithdrew(event: Withdrew): void {
+  let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Withdrew');
+  // positionLibrary.getOrCreate(event, transaction);
+}
+
+export function handleWithdrewMany(event: WithdrewMany): void {
+  let transaction = transactionLibrary.getOrCreateFromEvent(event, 'WithdrewMany');
+  // positionLibrary.getOrCreate(event, transaction);
+}

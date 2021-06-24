@@ -1,40 +1,68 @@
-type DCAGlobalParameters @entity {
+type GlobalParameters @entity {
   "address"
   id: ID!
   "fee recipient"
-  feeRecipient: Bytes!
+  feeRecipient: Bytes
   # "nft descriptor"
-  nftDescriptor: Bytes!
+  nftDescriptor: Bytes
   "swap fee"
-  swapFee: BigInt!
+  swapFee: BigInt
   "loan fee"
-  loanFee: BigInt!
+  loanFee: BigInt
   "fee precision"
-  FEE_PRECISION: Int!
+  FEE_PRECISION: Int
   "max fee"
-  MAX_FEE: BigInt!
-  "intervals"
-  allowedIntervals: [SwapInterval!]! @derivedFrom(field: "dcaGlobalParameters")
+  MAX_FEE: BigInt
+  # "intervals"
+  # allowedIntervals: [SwapInterval!]! @derivedFrom(field: "dcaGlobalParameters")
 }
 
 type SwapInterval @entity {
-  "tx.hash-added"
+  "interval"
   id: ID!
   "interval"
-  interval: Int!
+  interval: BigInt!
   "description"
   description: String!
-  "dca global parameter"
-  dcaGlobalParameters: DCAGlobalParameters!
+  # "dca global parameter"
+  # dcaGlobalParameters: DCAGlobalParameters!
 }
 
-type DCAPair @entity {
+type Pair @entity {
   "address"
   id: ID!
   "token0"
-  token0: Bytes!
+  token0: Token!
   "token1"
-  token1: Bytes!
+  token1: Token!
+  "positions"
+  positions: [Position!]! @derivedFrom(field: "pair")
+}
+
+enum POSITION_STATUS {
+  ACTIVE
+  TERMINATED
+}
+
+type Position @entity {
+  "position.id"
+  id: ID!
+  "from"
+  from: Token!
+  "to"
+  to: Token!
+  "pair"
+  pair: Pair!
+  "swap interval"
+  swapInterval: SwapInterval!
+  "position status"
+  status: POSITION_STATUS!
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
 }
 
 type Transaction @entity {

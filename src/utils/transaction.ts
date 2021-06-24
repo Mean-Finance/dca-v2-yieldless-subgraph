@@ -6,20 +6,20 @@ export function createIdFromHashAndIndex(hash: Bytes, index: BigInt): string {
 }
 
 export function getOrCreateFromEvent(event: ethereum.Event, action: string): Transaction {
-  log.debug('[Transaction] Get or create transaction from event', []);
+  log.warning('[Transaction] Get or create transaction from event', []);
   let transaction = _getOrCreate(event.transaction, event.block, action);
   return transaction;
 }
 
 export function getOrCreateFromCall(call: ethereum.Call, action: string): Transaction {
-  log.debug('[Transaction] Get or create transaction from call', []);
+  log.warning('[Transaction] Get or create transaction from call', []);
   let transaction = _getOrCreate(call.transaction, call.block, action);
   return transaction;
 }
 
 function _getOrCreate(ethTransaction: ethereum.Transaction, block: ethereum.Block, action: string): Transaction {
   let id = createIdFromHashAndIndex(ethTransaction.hash, ethTransaction.index);
-  log.debug('[Transaction] Get or create {}', [id]);
+  log.warning('[Transaction] Get or create {}', [id]);
   let transaction = Transaction.load(id);
   if (transaction == null) {
     transaction = new Transaction(id);

@@ -1,39 +1,58 @@
-import { log, ethereum, BigInt, Address } from '@graphprotocol/graph-ts';
-import { SwapInterval, DCAGlobalParameters, Transaction } from '../../generated/schema';
-import { GlobalParameters, SwapIntervalsAllowed } from '../../generated/GlobalParameters/GlobalParameters';
+import { log, ethereum, BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
+import { SwapInterval, GlobalParameters, Transaction } from '../../generated/schema';
+import {
+  GlobalParameters as GlobalParametersContract,
+  SwapIntervalsAllowed,
+  SwapIntervalsForbidden,
+} from '../../generated/GlobalParameters/GlobalParameters';
 
-export function getOrCreate(address: Address): DCAGlobalParameters {
+export function getOrCreate(address: Address): void {
   let id = address.toHexString();
-  log.debug('[GlobalParameters] Get or create {}', [id]);
-  let globalParameters = DCAGlobalParameters.load(id);
-  if (globalParameters == null) {
-    let globalParametersContract = GlobalParameters.bind(address);
-    globalParameters = new DCAGlobalParameters(id);
-    globalParameters.feeRecipient = globalParametersContract.feeRecipient();
-    globalParameters.nftDescriptor = globalParametersContract.nftDescriptor();
-    globalParameters.swapFee = globalParametersContract.swapFee();
-    globalParameters.loanFee = globalParametersContract.loanFee();
-    globalParameters.FEE_PRECISION = globalParametersContract.FEE_PRECISION();
-    globalParameters.MAX_FEE = globalParametersContract.MAX_FEE();
-    globalParameters.allowedIntervals = [];
-    globalParameters.save();
-  }
-  return globalParameters!;
+  log.warning('[GlobalParameters] Get or create {}', [id]);
+  // let globalParameters = GlobalParameters.load(id);
+  // if (globalParameters == null) {
+  //     let globalParametersContract = GlobalParameters.bind(address);
+  // globalParameters = new GlobalParameters(id);
+  //     globalParameters.feeRecipient = globalParametersContract.feeRecipient() as Bytes;
+  //     globalParameters.nftDescriptor = globalParametersContract.nftDescriptor() as Bytes;
+  //     globalParameters.swapFee = globalParametersContract.swapFee();
+  //     globalParameters.loanFee = globalParametersContract.loanFee();
+  //     globalParameters.FEE_PRECISION = globalParametersContract.FEE_PRECISION();
+  //     globalParameters.MAX_FEE = globalParametersContract.MAX_FEE();
+  //     log.warning('Pre save', []);
+  // globalParameters.save();
+  // }
+  //   return globalParameters!;
 }
 
-export function addSwapIntervals(event: SwapIntervalsAllowed, transaction: Transaction): DCAGlobalParameters {
-  log.debug('[GlobalParameters] Add {} swap intervals {}', [event.params._swapIntervals.length.toString()]);
-  let globalParameters = getOrCreate(transaction.to!);
-  for (let i = 0; i < event.params._swapIntervals.length; i++) {
-    let swapIntervalId = `${transaction.id}-${i.toString()}`;
+export function addSwapIntervals(event: SwapIntervalsAllowed, transaction: Transaction): void {
+  log.warning('[GlobalParameters] Add swap interval', []);
+  getOrCreate(event.transaction.to as Address);
+  let intervals = event.params._swapIntervals;
+  let descriptions = event.params._descriptions;
+  for (let i: i32 = 0; i < intervals.length; i++) {
+    let swapIntervalId = intervals[i].toString();
     let swapInterval = SwapInterval.load(swapIntervalId);
     if (swapInterval == null) {
       swapInterval = new SwapInterval(swapIntervalId);
-      swapInterval.dcaGlobalParameters = globalParameters.id;
-      swapInterval.interval = event.params._swapIntervals[i];
-      swapInterval.description = event.params._descriptions[i];
+      // swapInterval.dcaGlobalParameters = globalParameters.id;
+      swapInterval.interval = intervals[i];
+      swapInterval.description = descriptions[i];
       swapInterval.save();
     }
   }
-  return globalParameters!;
+  // return globalParameters!;
+}
+
+export function removeSwapIntervals(event: SwapIntervalsForbidden, transaction: Transaction): void {
+  log.warning('[GlobalParameters] Remove swap intervals', []);
+  // let globalParameters = getOrCreate(transaction.to!);
+  // for (let i = 0; i < event.params._swapIntervals.length; i++) {
+  //   let swapIntervalId = transaction.id + i;
+  //   let swapInterval = SwapInterval.load(swapIntervalId);
+  //   if (swapInterval != null) {
+  //     // TODO: delete
+  //   }
+  // }
+  // return globalParameters!;
 }
