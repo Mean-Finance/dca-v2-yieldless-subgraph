@@ -37,6 +37,16 @@ type Pair @entity {
   token1: Token!
   "positions"
   positions: [Position!]! @derivedFrom(field: "pair")
+  "swaps"
+  swaps: [PairSwap!]! @derivedFrom(field: "pair")
+  "swaps intervals"
+  swapsIntervals: [PairSwapInterval!]! @derivedFrom(field: "pair")
+  "created at transaction"
+  transaction: Transaction!
+  "created at block"
+  createdAtBlock: BigInt!
+  "created at timestamp"
+  createdAtTimestamp: BigInt!
 }
 
 enum POSITION_STATUS {
@@ -92,6 +102,66 @@ type PositionState @entity {
   createdAtBlock: BigInt!
   "createdAtTimestamp"
   createdAtTimestamp: BigInt!
+}
+
+type PairSwap @entity {
+  "pair.address-transaction.hash"
+  id: ID!
+  "pair"
+  pair: Pair!
+  "swapper"
+  swapper: Bytes!
+  "swap callee"
+  swapCalle: Bytes
+  "borrowed token a"
+  borrowedTokenA: BigInt!
+  "borrowed token b"
+  borrowedTokenB: BigInt!
+  "pair swap intervals"
+  pairSwapsIntervals: [PairSwapInterval!]! @derivedFrom(field: "pairSwap")
+  "available to borrow token a"
+  availableToBorrowTokenA: BigInt!
+  "available to borrow token b"
+  availableToBorrowTokenB: BigInt!
+  "rate per unit b to a"
+  ratePerUnitBToA: BigInt!
+  "rate per unit a to b"
+  ratePerUnitAToB: BigInt!
+  "fee from token a"
+  platformFeeTokenA: BigInt!
+  "fee from token b"
+  platformFeeTokenB: BigInt!
+  "amount to be provided by swapper"
+  amountToBeProvidedBySwapper: BigInt!
+  "amount to reward swapper"
+  amountToRewardSwapperWith: BigInt!
+  "token to be provided by swapper"
+  tokenToBeProvidedBySwapper: Token!
+  "token to reward swapper with"
+  tokenToRewardSwapperWith: Token!
+  "executed with transaction"
+  transaction: Transaction!
+  "executed at block number"
+  executedAtBlock: BigInt!
+  "executed at timestamp"
+  executedAtTimestamp: BigInt!
+}
+
+type PairSwapInterval @entity {
+  "pairSwap.id-swapInterval.interval"
+  id: ID!
+  "pair"
+  pair: Pair!
+  "pair swap"
+  pairSwap: PairSwap!
+  "swap interval"
+  swapInterval: SwapInterval!
+  "swap performed"
+  swapPerformed: BigInt!
+  "amount to swap token a"
+  amountToSwapTokenA: BigInt!
+  "amount to swap token b"
+  amountToSwapTokenB: BigInt!
 }
 
 type Transaction @entity {

@@ -3,6 +3,8 @@ import { Transaction, Pair } from '../../generated/schema';
 import { PairCreated } from '../../generated/Factory/Factory';
 import { Pair as PairTemplate } from '../../generated/templates';
 import * as tokenLibrary from '../utils/token';
+import * as pairSwapLibrary from '../utils/pair-swap';
+import { Swapped } from '../../generated/Factory/Pair';
 
 export function create(event: PairCreated, transaction: Transaction): Pair {
   let id = event.params._pair.toHexString();
@@ -14,6 +16,9 @@ export function create(event: PairCreated, transaction: Transaction): Pair {
     pair = new Pair(id);
     pair.token0 = token0.id;
     pair.token1 = token1.id;
+    pair.transaction = transaction.id;
+    pair.createdAtBlock = transaction.blockNumber;
+    pair.createdAtTimestamp = transaction.timestamp;
     pair.save();
     PairTemplate.create(event.params._pair);
   }
@@ -24,4 +29,11 @@ export function get(id: string): Pair {
   log.warning('[Pair] Get {}', [id]);
   let pair = Pair.load(id);
   return pair!;
+}
+
+export function swapped(event: Swapped, transaction: Transaction): void {
+  let id = transaction.to.toHexString();
+  log.warning('[Pair] Swapped {}', [id]);
+  let pair = get(id);
+  pairSwapLibrary.create(pair!, event, transaction);
 }

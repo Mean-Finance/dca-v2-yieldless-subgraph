@@ -207,56 +207,72 @@ export class Swapped__Params {
 }
 
 export class Swapped_nextSwapInformationStruct extends ethereum.Tuple {
-  get swapToPerform(): BigInt {
-    return this[0].toBigInt();
+  get swapsToPerform(): Array<Swapped_nextSwapInformationSwapsToPerformStruct> {
+    return this[0].toTupleArray<
+      Swapped_nextSwapInformationSwapsToPerformStruct
+    >();
   }
 
-  get amountToSwapTokenA(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get amountToSwapTokenB(): BigInt {
-    return this[2].toBigInt();
+  get amountOfSwaps(): i32 {
+    return this[1].toI32();
   }
 
   get availableToBorrowTokenA(): BigInt {
-    return this[3].toBigInt();
+    return this[2].toBigInt();
   }
 
   get availableToBorrowTokenB(): BigInt {
-    return this[4].toBigInt();
+    return this[3].toBigInt();
   }
 
   get ratePerUnitBToA(): BigInt {
-    return this[5].toBigInt();
+    return this[4].toBigInt();
   }
 
   get ratePerUnitAToB(): BigInt {
-    return this[6].toBigInt();
+    return this[5].toBigInt();
   }
 
   get platformFeeTokenA(): BigInt {
-    return this[7].toBigInt();
+    return this[6].toBigInt();
   }
 
   get platformFeeTokenB(): BigInt {
-    return this[8].toBigInt();
+    return this[7].toBigInt();
   }
 
   get amountToBeProvidedBySwapper(): BigInt {
-    return this[9].toBigInt();
+    return this[8].toBigInt();
   }
 
   get amountToRewardSwapperWith(): BigInt {
-    return this[10].toBigInt();
+    return this[9].toBigInt();
   }
 
   get tokenToBeProvidedBySwapper(): Address {
-    return this[11].toAddress();
+    return this[10].toAddress();
   }
 
   get tokenToRewardSwapperWith(): Address {
-    return this[12].toAddress();
+    return this[11].toAddress();
+  }
+}
+
+export class Swapped_nextSwapInformationSwapsToPerformStruct extends ethereum.Tuple {
+  get interval(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get swapToPerform(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get amountToSwapTokenA(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get amountToSwapTokenB(): BigInt {
+    return this[3].toBigInt();
   }
 }
 
@@ -377,56 +393,74 @@ export class WithdrewMany__Params {
 }
 
 export class Pair__getNextSwapInfoResult_nextSwapInformationStruct extends ethereum.Tuple {
-  get swapToPerform(): BigInt {
-    return this[0].toBigInt();
+  get swapsToPerform(): Array<
+    Pair__getNextSwapInfoResult_nextSwapInformationSwapsToPerformStruct
+  > {
+    return this[0].toTupleArray<
+      Pair__getNextSwapInfoResult_nextSwapInformationSwapsToPerformStruct
+    >();
   }
 
-  get amountToSwapTokenA(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get amountToSwapTokenB(): BigInt {
-    return this[2].toBigInt();
+  get amountOfSwaps(): i32 {
+    return this[1].toI32();
   }
 
   get availableToBorrowTokenA(): BigInt {
-    return this[3].toBigInt();
+    return this[2].toBigInt();
   }
 
   get availableToBorrowTokenB(): BigInt {
-    return this[4].toBigInt();
+    return this[3].toBigInt();
   }
 
   get ratePerUnitBToA(): BigInt {
-    return this[5].toBigInt();
+    return this[4].toBigInt();
   }
 
   get ratePerUnitAToB(): BigInt {
-    return this[6].toBigInt();
+    return this[5].toBigInt();
   }
 
   get platformFeeTokenA(): BigInt {
-    return this[7].toBigInt();
+    return this[6].toBigInt();
   }
 
   get platformFeeTokenB(): BigInt {
-    return this[8].toBigInt();
+    return this[7].toBigInt();
   }
 
   get amountToBeProvidedBySwapper(): BigInt {
-    return this[9].toBigInt();
+    return this[8].toBigInt();
   }
 
   get amountToRewardSwapperWith(): BigInt {
-    return this[10].toBigInt();
+    return this[9].toBigInt();
   }
 
   get tokenToBeProvidedBySwapper(): Address {
-    return this[11].toAddress();
+    return this[10].toAddress();
   }
 
   get tokenToRewardSwapperWith(): Address {
-    return this[12].toAddress();
+    return this[11].toAddress();
+  }
+}
+
+export class Pair__getNextSwapInfoResult_nextSwapInformationSwapsToPerformStruct extends ethereum.Tuple {
+  get interval(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get swapToPerform(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get amountToSwapTokenA(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get amountToSwapTokenB(): BigInt {
+    return this[3].toBigInt();
   }
 }
 
@@ -486,6 +520,29 @@ export class Pair extends ethereum.SmartContract {
     return new Pair("Pair", address);
   }
 
+  activeSwapIntervals(): Array<BigInt> {
+    let result = super.call(
+      "activeSwapIntervals",
+      "activeSwapIntervals():(uint32[])",
+      []
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_activeSwapIntervals(): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "activeSwapIntervals",
+      "activeSwapIntervals():(uint32[])",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
   balanceOf(owner: Address): BigInt {
     let result = super.call("balanceOf", "balanceOf(address):(uint256)", [
       ethereum.Value.fromAddress(owner)
@@ -513,7 +570,7 @@ export class Pair extends ethereum.SmartContract {
   ): BigInt {
     let result = super.call(
       "deposit",
-      "deposit(address,uint192,uint32,uint32):(uint256)",
+      "deposit(address,uint160,uint32,uint32):(uint256)",
       [
         ethereum.Value.fromAddress(_tokenAddress),
         ethereum.Value.fromUnsignedBigInt(_rate),
@@ -533,7 +590,7 @@ export class Pair extends ethereum.SmartContract {
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "deposit",
-      "deposit(address,uint192,uint32,uint32):(uint256)",
+      "deposit(address,uint160,uint32,uint32):(uint256)",
       [
         ethereum.Value.fromAddress(_tokenAddress),
         ethereum.Value.fromUnsignedBigInt(_rate),
@@ -569,27 +626,23 @@ export class Pair extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getNextSwapInfo(
-    _swapInterval: BigInt
-  ): Pair__getNextSwapInfoResult_nextSwapInformationStruct {
+  getNextSwapInfo(): Pair__getNextSwapInfoResult_nextSwapInformationStruct {
     let result = super.call(
       "getNextSwapInfo",
-      "getNextSwapInfo(uint32):((uint32,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address))",
-      [ethereum.Value.fromUnsignedBigInt(_swapInterval)]
+      "getNextSwapInfo():(((uint32,uint32,uint256,uint256)[],uint8,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address))",
+      []
     );
 
     return result[0].toTuple() as Pair__getNextSwapInfoResult_nextSwapInformationStruct;
   }
 
-  try_getNextSwapInfo(
-    _swapInterval: BigInt
-  ): ethereum.CallResult<
+  try_getNextSwapInfo(): ethereum.CallResult<
     Pair__getNextSwapInfoResult_nextSwapInformationStruct
   > {
     let result = super.tryCall(
       "getNextSwapInfo",
-      "getNextSwapInfo(uint32):((uint32,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address))",
-      [ethereum.Value.fromUnsignedBigInt(_swapInterval)]
+      "getNextSwapInfo():(((uint32,uint32,uint256,uint256)[],uint8,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address))",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -649,29 +702,6 @@ export class Pair extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  lastSwapPerformed(param0: BigInt): BigInt {
-    let result = super.call(
-      "lastSwapPerformed",
-      "lastSwapPerformed(uint32):(uint32)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_lastSwapPerformed(param0: BigInt): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "lastSwapPerformed",
-      "lastSwapPerformed(uint32):(uint32)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   name(): string {
     let result = super.call("name", "name():(string)", []);
 
@@ -685,6 +715,29 @@ export class Pair extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  nextSwapAvailable(param0: BigInt): BigInt {
+    let result = super.call(
+      "nextSwapAvailable",
+      "nextSwapAvailable(uint32):(uint32)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_nextSwapAvailable(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "nextSwapAvailable",
+      "nextSwapAvailable(uint32):(uint32)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   oracle(): Address {
@@ -736,6 +789,29 @@ export class Pair extends ethereum.SmartContract {
       "performedSwaps",
       "performedSwaps(uint32):(uint32)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  secondsUntilNextSwap(): BigInt {
+    let result = super.call(
+      "secondsUntilNextSwap",
+      "secondsUntilNextSwap():(uint32)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_secondsUntilNextSwap(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "secondsUntilNextSwap",
+      "secondsUntilNextSwap():(uint32)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -901,7 +977,7 @@ export class Pair extends ethereum.SmartContract {
   userPosition(_dcaId: BigInt): Pair__userPositionResult_userPositionStruct {
     let result = super.call(
       "userPosition",
-      "userPosition(uint256):((address,address,uint32,uint32,uint256,uint32,uint256,uint192))",
+      "userPosition(uint256):((address,address,uint32,uint32,uint256,uint32,uint256,uint160))",
       [ethereum.Value.fromUnsignedBigInt(_dcaId)]
     );
 
@@ -913,7 +989,7 @@ export class Pair extends ethereum.SmartContract {
   ): ethereum.CallResult<Pair__userPositionResult_userPositionStruct> {
     let result = super.tryCall(
       "userPosition",
-      "userPosition(uint256):((address,address,uint32,uint32,uint256,uint32,uint256,uint192))",
+      "userPosition(uint256):((address,address,uint32,uint32,uint256,uint32,uint256,uint160))",
       [ethereum.Value.fromUnsignedBigInt(_dcaId)]
     );
     if (result.reverted) {
@@ -1421,24 +1497,20 @@ export class SwapCall__Inputs {
     this._call = call;
   }
 
-  get _swapInterval(): BigInt {
+  get _amountToBorrowTokenA(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
 
-  get _amountToBorrowTokenA(): BigInt {
+  get _amountToBorrowTokenB(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
 
-  get _amountToBorrowTokenB(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
   get _to(): Address {
-    return this._call.inputValues[3].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
   }
 
   get _data(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
+    return this._call.inputValues[3].value.toBytes();
   }
 }
 
@@ -1465,10 +1537,6 @@ export class Swap1Call__Inputs {
 
   constructor(call: Swap1Call) {
     this._call = call;
-  }
-
-  get _swapInterval(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
   }
 }
 

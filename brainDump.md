@@ -5,24 +5,48 @@ Positions
 - to
 - swapInterval
 
+PositionState
+
 - rate
 - swapsLeft
 - swapsExecuted
 
-Pair
+PositionSwap
+
+- id
+- position
+- positionState
+- pairSwap
+- swapped (from)
+- rate
+- obtained (to)
 
 PairSwap
 
 - id
 - pair
-- amountToBorrowTokenA
-- amountToBorrowTokenB
+- swapper
+- swapCalle
+- borrowedTokenA
+- borrowedTokenB
+- pairSwapIntervals[]
+- availableToBorrowTokenA
+- availableToBorrowTokenB
+- ratePerUnitBToA
+- ratePerUnitAToB
+- platformFeeTokenA
+- platformFeeTokenB
+- amountToBeProvidedBySwapper
+- amountToRewardSwapperWith
+- tokenToBeProvidedBySwapper
+- tokenToRewardSwapperWith
+- blockNumber
+- timestamp
 
-PairSwapInterval
-
-- id
-- pairSwap
-- pair
-- swapInterval
-- amountToSwapTokenA
-- amountToSwapTokenB
+- PairSwapInterval
+  - id
+  - swapInterval
+  - pairSwap
+  - swapPerformed;
+  - amountToSwapTokenA
+  - amountToSwapTokenB

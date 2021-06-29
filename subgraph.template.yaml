@@ -68,9 +68,9 @@ templates:
         - name: Pair
           file: ./abis/Pair.json
       eventHandlers:
-        - event: Deposited(indexed address,uint256,address,uint192,uint32,uint32,uint32)
+        - event: Deposited(indexed address,uint256,address,uint160,uint32,uint32,uint32)
           handler: handleDeposited
-        - event: Modified(indexed address,uint256,uint192,uint32,uint32)
+        - event: Modified(indexed address,uint256,uint160,uint32,uint32)
           handler: handleModified
         - event: Terminated(indexed address,uint256,uint256,uint256)
           handler: handleTerminated
@@ -78,3 +78,5 @@ templates:
           handler: handleWithdrew
         - event: WithdrewMany(indexed address,uint256[],uint256,uint256)
           handler: handleWithdrewMany
+        - event: Swapped(indexed address,indexed address,uint256,uint256,((uint32,uint32,uint256,uint256)[],uint8,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address))
+          handler: handleSwapped

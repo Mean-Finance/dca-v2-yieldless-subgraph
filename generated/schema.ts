@@ -242,6 +242,42 @@ export class Pair extends Entity {
   set positions(value: Array<string>) {
     this.set("positions", Value.fromStringArray(value));
   }
+
+  get swaps(): Array<string> {
+    let value = this.get("swaps");
+    return value.toStringArray();
+  }
+
+  set swaps(value: Array<string>) {
+    this.set("swaps", Value.fromStringArray(value));
+  }
+
+  get transaction(): string {
+    let value = this.get("transaction");
+    return value.toString();
+  }
+
+  set transaction(value: string) {
+    this.set("transaction", Value.fromString(value));
+  }
+
+  get createdAtBlock(): BigInt {
+    let value = this.get("createdAtBlock");
+    return value.toBigInt();
+  }
+
+  set createdAtBlock(value: BigInt) {
+    this.set("createdAtBlock", Value.fromBigInt(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
 }
 
 export class Position extends Entity {
@@ -499,6 +535,301 @@ export class PositionState extends Entity {
 
   set createdAtTimestamp(value: BigInt) {
     this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+}
+
+export class PairSwap extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PairSwap entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PairSwap entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PairSwap", id.toString(), this);
+  }
+
+  static load(id: string): PairSwap | null {
+    return store.get("PairSwap", id) as PairSwap | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get pair(): string {
+    let value = this.get("pair");
+    return value.toString();
+  }
+
+  set pair(value: string) {
+    this.set("pair", Value.fromString(value));
+  }
+
+  get swapper(): Bytes {
+    let value = this.get("swapper");
+    return value.toBytes();
+  }
+
+  set swapper(value: Bytes) {
+    this.set("swapper", Value.fromBytes(value));
+  }
+
+  get swapCalle(): Bytes | null {
+    let value = this.get("swapCalle");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set swapCalle(value: Bytes | null) {
+    if (value === null) {
+      this.unset("swapCalle");
+    } else {
+      this.set("swapCalle", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get borrowedTokenA(): BigInt {
+    let value = this.get("borrowedTokenA");
+    return value.toBigInt();
+  }
+
+  set borrowedTokenA(value: BigInt) {
+    this.set("borrowedTokenA", Value.fromBigInt(value));
+  }
+
+  get borrowedTokenB(): BigInt {
+    let value = this.get("borrowedTokenB");
+    return value.toBigInt();
+  }
+
+  set borrowedTokenB(value: BigInt) {
+    this.set("borrowedTokenB", Value.fromBigInt(value));
+  }
+
+  get pairSwaps(): Array<string> {
+    let value = this.get("pairSwaps");
+    return value.toStringArray();
+  }
+
+  set pairSwaps(value: Array<string>) {
+    this.set("pairSwaps", Value.fromStringArray(value));
+  }
+
+  get availableToBorrowTokenA(): BigInt {
+    let value = this.get("availableToBorrowTokenA");
+    return value.toBigInt();
+  }
+
+  set availableToBorrowTokenA(value: BigInt) {
+    this.set("availableToBorrowTokenA", Value.fromBigInt(value));
+  }
+
+  get availableToBorrowTokenB(): BigInt {
+    let value = this.get("availableToBorrowTokenB");
+    return value.toBigInt();
+  }
+
+  set availableToBorrowTokenB(value: BigInt) {
+    this.set("availableToBorrowTokenB", Value.fromBigInt(value));
+  }
+
+  get ratePerUnitBToA(): BigInt {
+    let value = this.get("ratePerUnitBToA");
+    return value.toBigInt();
+  }
+
+  set ratePerUnitBToA(value: BigInt) {
+    this.set("ratePerUnitBToA", Value.fromBigInt(value));
+  }
+
+  get ratePerUnitAToB(): BigInt {
+    let value = this.get("ratePerUnitAToB");
+    return value.toBigInt();
+  }
+
+  set ratePerUnitAToB(value: BigInt) {
+    this.set("ratePerUnitAToB", Value.fromBigInt(value));
+  }
+
+  get platformFeeTokenA(): BigInt {
+    let value = this.get("platformFeeTokenA");
+    return value.toBigInt();
+  }
+
+  set platformFeeTokenA(value: BigInt) {
+    this.set("platformFeeTokenA", Value.fromBigInt(value));
+  }
+
+  get platformFeeTokenB(): BigInt {
+    let value = this.get("platformFeeTokenB");
+    return value.toBigInt();
+  }
+
+  set platformFeeTokenB(value: BigInt) {
+    this.set("platformFeeTokenB", Value.fromBigInt(value));
+  }
+
+  get amountToBeProvidedBySwapper(): BigInt {
+    let value = this.get("amountToBeProvidedBySwapper");
+    return value.toBigInt();
+  }
+
+  set amountToBeProvidedBySwapper(value: BigInt) {
+    this.set("amountToBeProvidedBySwapper", Value.fromBigInt(value));
+  }
+
+  get amountToRewardSwapperWith(): BigInt {
+    let value = this.get("amountToRewardSwapperWith");
+    return value.toBigInt();
+  }
+
+  set amountToRewardSwapperWith(value: BigInt) {
+    this.set("amountToRewardSwapperWith", Value.fromBigInt(value));
+  }
+
+  get tokenToBeProvidedBySwapper(): string {
+    let value = this.get("tokenToBeProvidedBySwapper");
+    return value.toString();
+  }
+
+  set tokenToBeProvidedBySwapper(value: string) {
+    this.set("tokenToBeProvidedBySwapper", Value.fromString(value));
+  }
+
+  get tokenToRewardSwapperWith(): string {
+    let value = this.get("tokenToRewardSwapperWith");
+    return value.toString();
+  }
+
+  set tokenToRewardSwapperWith(value: string) {
+    this.set("tokenToRewardSwapperWith", Value.fromString(value));
+  }
+
+  get transaction(): string {
+    let value = this.get("transaction");
+    return value.toString();
+  }
+
+  set transaction(value: string) {
+    this.set("transaction", Value.fromString(value));
+  }
+
+  get executedAtBlock(): BigInt {
+    let value = this.get("executedAtBlock");
+    return value.toBigInt();
+  }
+
+  set executedAtBlock(value: BigInt) {
+    this.set("executedAtBlock", Value.fromBigInt(value));
+  }
+
+  get executedAtTimestamp(): BigInt {
+    let value = this.get("executedAtTimestamp");
+    return value.toBigInt();
+  }
+
+  set executedAtTimestamp(value: BigInt) {
+    this.set("executedAtTimestamp", Value.fromBigInt(value));
+  }
+}
+
+export class PairSwapInterval extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PairSwapInterval entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PairSwapInterval entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PairSwapInterval", id.toString(), this);
+  }
+
+  static load(id: string): PairSwapInterval | null {
+    return store.get("PairSwapInterval", id) as PairSwapInterval | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get pair(): string {
+    let value = this.get("pair");
+    return value.toString();
+  }
+
+  set pair(value: string) {
+    this.set("pair", Value.fromString(value));
+  }
+
+  get pairSwap(): string {
+    let value = this.get("pairSwap");
+    return value.toString();
+  }
+
+  set pairSwap(value: string) {
+    this.set("pairSwap", Value.fromString(value));
+  }
+
+  get swapInterval(): string {
+    let value = this.get("swapInterval");
+    return value.toString();
+  }
+
+  set swapInterval(value: string) {
+    this.set("swapInterval", Value.fromString(value));
+  }
+
+  get swapPerformed(): BigInt {
+    let value = this.get("swapPerformed");
+    return value.toBigInt();
+  }
+
+  set swapPerformed(value: BigInt) {
+    this.set("swapPerformed", Value.fromBigInt(value));
+  }
+
+  get amountToSwapTokenA(): BigInt {
+    let value = this.get("amountToSwapTokenA");
+    return value.toBigInt();
+  }
+
+  set amountToSwapTokenA(value: BigInt) {
+    this.set("amountToSwapTokenA", Value.fromBigInt(value));
+  }
+
+  get amountToSwapTokenB(): BigInt {
+    let value = this.get("amountToSwapTokenB");
+    return value.toBigInt();
+  }
+
+  set amountToSwapTokenB(value: BigInt) {
+    this.set("amountToSwapTokenB", Value.fromBigInt(value));
   }
 }
 
