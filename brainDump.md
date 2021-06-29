@@ -9,11 +9,12 @@ Positions
 - swapsLeft
 - swapsExecuted
 
+Pair
+
 PairSwap
 
 - id
 - pair
-- swapInterval
 - amountToBorrowTokenA
 - amountToBorrowTokenB
 

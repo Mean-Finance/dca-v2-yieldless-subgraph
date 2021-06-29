@@ -310,6 +310,24 @@ export class Position extends Entity {
     this.set("swapInterval", Value.fromString(value));
   }
 
+  get current(): string {
+    let value = this.get("current");
+    return value.toString();
+  }
+
+  set current(value: string) {
+    this.set("current", Value.fromString(value));
+  }
+
+  get history(): Array<string> {
+    let value = this.get("history");
+    return value.toStringArray();
+  }
+
+  set history(value: Array<string>) {
+    this.set("history", Value.fromStringArray(value));
+  }
+
   get status(): string {
     let value = this.get("status");
     return value.toString();
@@ -317,6 +335,143 @@ export class Position extends Entity {
 
   set status(value: string) {
     this.set("status", Value.fromString(value));
+  }
+
+  get transaction(): string {
+    let value = this.get("transaction");
+    return value.toString();
+  }
+
+  set transaction(value: string) {
+    this.set("transaction", Value.fromString(value));
+  }
+
+  get createdAtBlock(): BigInt {
+    let value = this.get("createdAtBlock");
+    return value.toBigInt();
+  }
+
+  set createdAtBlock(value: BigInt) {
+    this.set("createdAtBlock", Value.fromBigInt(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get terminatedAtBlock(): BigInt | null {
+    let value = this.get("terminatedAtBlock");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set terminatedAtBlock(value: BigInt | null) {
+    if (value === null) {
+      this.unset("terminatedAtBlock");
+    } else {
+      this.set("terminatedAtBlock", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get terminatedAtTimestamp(): BigInt | null {
+    let value = this.get("terminatedAtTimestamp");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set terminatedAtTimestamp(value: BigInt | null) {
+    if (value === null) {
+      this.unset("terminatedAtTimestamp");
+    } else {
+      this.set("terminatedAtTimestamp", Value.fromBigInt(value as BigInt));
+    }
+  }
+}
+
+export class PositionState extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PositionState entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PositionState entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PositionState", id.toString(), this);
+  }
+
+  static load(id: string): PositionState | null {
+    return store.get("PositionState", id) as PositionState | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get position(): string {
+    let value = this.get("position");
+    return value.toString();
+  }
+
+  set position(value: string) {
+    this.set("position", Value.fromString(value));
+  }
+
+  get rate(): BigInt {
+    let value = this.get("rate");
+    return value.toBigInt();
+  }
+
+  set rate(value: BigInt) {
+    this.set("rate", Value.fromBigInt(value));
+  }
+
+  get startingSwap(): BigInt {
+    let value = this.get("startingSwap");
+    return value.toBigInt();
+  }
+
+  set startingSwap(value: BigInt) {
+    this.set("startingSwap", Value.fromBigInt(value));
+  }
+
+  get lastSwap(): BigInt {
+    let value = this.get("lastSwap");
+    return value.toBigInt();
+  }
+
+  set lastSwap(value: BigInt) {
+    this.set("lastSwap", Value.fromBigInt(value));
+  }
+
+  get remainingSwaps(): BigInt {
+    let value = this.get("remainingSwaps");
+    return value.toBigInt();
+  }
+
+  set remainingSwaps(value: BigInt) {
+    this.set("remainingSwaps", Value.fromBigInt(value));
   }
 
   get transaction(): string {

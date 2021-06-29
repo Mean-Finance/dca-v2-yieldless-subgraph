@@ -4,5 +4,5 @@ import { PairCreated } from '../../generated/Factory/Factory';
 
 export function handlePairCreated(event: PairCreated): void {
   let transaction = transactionLibrary.getOrCreateFromEvent(event, 'PairCreated');
-  pairLibrary.getOrCreate(event, transaction);
+  pairLibrary.create(event, transaction);
 }

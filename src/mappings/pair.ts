@@ -4,17 +4,17 @@ import { Deposited, Modified, Terminated, Withdrew, WithdrewMany } from '../../g
 
 export function handleDeposited(event: Deposited): void {
   let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Deposited');
-  positionLibrary.getOrCreate(event, transaction);
+  positionLibrary.create(event, transaction);
 }
 
 export function handleModified(event: Modified): void {
   let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Modified');
-  // positionLibrary.getOrCreate(event, transaction);
+  positionLibrary.modified(event, transaction);
 }
 
 export function handleTerminated(event: Terminated): void {
   let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Terminated');
-  // positionLibrary.getOrCreate(event, transaction);
+  positionLibrary.terminated(event, transaction);
 }
 
 export function handleWithdrew(event: Withdrew): void {

@@ -4,9 +4,9 @@ import { PairCreated } from '../../generated/Factory/Factory';
 import { Pair as PairTemplate } from '../../generated/templates';
 import * as tokenLibrary from '../utils/token';
 
-export function getOrCreate(event: PairCreated, transaction: Transaction): Pair {
+export function create(event: PairCreated, transaction: Transaction): Pair {
   let id = event.params._pair.toHexString();
-  log.warning('[Pair] Get or create {}', [id]);
+  log.warning('[Pair] Create {}', [id]);
   let pair = Pair.load(id);
   let token0 = tokenLibrary.getOrCreate(event.params._token0);
   let token1 = tokenLibrary.getOrCreate(event.params._token1);

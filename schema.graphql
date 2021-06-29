@@ -55,8 +55,37 @@ type Position @entity {
   pair: Pair!
   "swap interval"
   swapInterval: SwapInterval!
+  "state"
+  current: PositionState!
+  "past states"
+  history: [PositionState!]! @derivedFrom(field: "position")
   "position status"
   status: POSITION_STATUS!
+  "transaction"
+  transaction: Transaction!
+  "created at block"
+  createdAtBlock: BigInt!
+  "created at timestamp"
+  createdAtTimestamp: BigInt!
+  "terminated at block"
+  terminatedAtBlock: BigInt
+  "terminated at timestamp"
+  terminatedAtTimestamp: BigInt
+}
+
+type PositionState @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "rate"
+  rate: BigInt!
+  "starting swap"
+  startingSwap: BigInt!
+  "last swap"
+  lastSwap: BigInt!
+  "remaining swaps"
+  remainingSwaps: BigInt!
   "transaction"
   transaction: Transaction!
   "createdAtBlock"
