@@ -3,8 +3,11 @@ import { Transaction, Pair } from '../../generated/schema';
 import { PairCreated } from '../../generated/Factory/Factory';
 import { Pair as PairTemplate } from '../../generated/templates';
 import * as tokenLibrary from '../utils/token';
+import * as positionLibrary from '../utils/position';
 import * as pairSwapLibrary from '../utils/pair-swap';
 import { Swapped } from '../../generated/Factory/Pair';
+import { Pair as PairContract } from '../../generated/Factory/Pair';
+import { ZERO_BI } from './constants';
 
 export function create(event: PairCreated, transaction: Transaction): Pair {
   let id = event.params._pair.toHexString();
@@ -16,6 +19,7 @@ export function create(event: PairCreated, transaction: Transaction): Pair {
     pair = new Pair(id);
     pair.token0 = token0.id;
     pair.token1 = token1.id;
+    pair.highestId = ZERO_BI; // TODO: Remove this patch
     pair.transaction = transaction.id;
     pair.createdAtBlock = transaction.blockNumber;
     pair.createdAtTimestamp = transaction.timestamp;
@@ -35,5 +39,10 @@ export function swapped(event: Swapped, transaction: Transaction): void {
   let id = transaction.to.toHexString();
   log.warning('[Pair] Swapped {}', [id]);
   let pair = get(id);
-  pairSwapLibrary.create(pair!, event, transaction);
+  let pairSwap = pairSwapLibrary.create(pair!, event, transaction);
+  // let pairContract = PairContract.bind(event.transaction.to!); // TODO: use other "to" -- learn about type conversion
+  for (let i: i32 = 1; i < pair.highestId.toI32(); i++) {
+    // Should probably do some checks ?
+    positionLibrary.registerPairSwap(i.toString(), pairSwap);
+  }
 }

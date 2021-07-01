@@ -234,6 +234,15 @@ export class Pair extends Entity {
     this.set("token1", Value.fromString(value));
   }
 
+  get highestId(): BigInt {
+    let value = this.get("highestId");
+    return value.toBigInt();
+  }
+
+  set highestId(value: BigInt) {
+    this.set("highestId", Value.fromBigInt(value));
+  }
+
   get positions(): Array<string> {
     let value = this.get("positions");
     return value.toStringArray();
@@ -250,6 +259,15 @@ export class Pair extends Entity {
 
   set swaps(value: Array<string>) {
     this.set("swaps", Value.fromStringArray(value));
+  }
+
+  get swapsIntervals(): Array<string> {
+    let value = this.get("swapsIntervals");
+    return value.toStringArray();
+  }
+
+  set swapsIntervals(value: Array<string>) {
+    this.set("swapsIntervals", Value.fromStringArray(value));
   }
 
   get transaction(): string {
@@ -510,6 +528,33 @@ export class PositionState extends Entity {
     this.set("remainingSwaps", Value.fromBigInt(value));
   }
 
+  get swapped(): BigInt {
+    let value = this.get("swapped");
+    return value.toBigInt();
+  }
+
+  set swapped(value: BigInt) {
+    this.set("swapped", Value.fromBigInt(value));
+  }
+
+  get withdrawn(): BigInt {
+    let value = this.get("withdrawn");
+    return value.toBigInt();
+  }
+
+  set withdrawn(value: BigInt) {
+    this.set("withdrawn", Value.fromBigInt(value));
+  }
+
+  get remainingLiquidity(): BigInt {
+    let value = this.get("remainingLiquidity");
+    return value.toBigInt();
+  }
+
+  set remainingLiquidity(value: BigInt) {
+    this.set("remainingLiquidity", Value.fromBigInt(value));
+  }
+
   get transaction(): string {
     let value = this.get("transaction");
     return value.toString();
@@ -535,6 +580,73 @@ export class PositionState extends Entity {
 
   set createdAtTimestamp(value: BigInt) {
     this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+}
+
+export class PositionPairSwap extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PositionPairSwap entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PositionPairSwap entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PositionPairSwap", id.toString(), this);
+  }
+
+  static load(id: string): PositionPairSwap | null {
+    return store.get("PositionPairSwap", id) as PositionPairSwap | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get position(): string {
+    let value = this.get("position");
+    return value.toString();
+  }
+
+  set position(value: string) {
+    this.set("position", Value.fromString(value));
+  }
+
+  get pairSwap(): string {
+    let value = this.get("pairSwap");
+    return value.toString();
+  }
+
+  set pairSwap(value: string) {
+    this.set("pairSwap", Value.fromString(value));
+  }
+
+  get used(): BigInt {
+    let value = this.get("used");
+    return value.toBigInt();
+  }
+
+  set used(value: BigInt) {
+    this.set("used", Value.fromBigInt(value));
+  }
+
+  get swapped(): BigInt {
+    let value = this.get("swapped");
+    return value.toBigInt();
+  }
+
+  set swapped(value: BigInt) {
+    this.set("swapped", Value.fromBigInt(value));
   }
 }
 
@@ -621,13 +733,13 @@ export class PairSwap extends Entity {
     this.set("borrowedTokenB", Value.fromBigInt(value));
   }
 
-  get pairSwaps(): Array<string> {
-    let value = this.get("pairSwaps");
+  get pairSwapsIntervals(): Array<string> {
+    let value = this.get("pairSwapsIntervals");
     return value.toStringArray();
   }
 
-  set pairSwaps(value: Array<string>) {
-    this.set("pairSwaps", Value.fromStringArray(value));
+  set pairSwapsIntervals(value: Array<string>) {
+    this.set("pairSwapsIntervals", Value.fromStringArray(value));
   }
 
   get availableToBorrowTokenA(): BigInt {

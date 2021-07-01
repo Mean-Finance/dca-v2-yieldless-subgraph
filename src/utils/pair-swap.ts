@@ -1,6 +1,7 @@
 import { log } from '@graphprotocol/graph-ts';
 import { Transaction, Pair, PairSwap, PairSwapInterval } from '../../generated/schema';
 import { Swapped } from '../../generated/Factory/Pair';
+import * as positionLibrary from './position';
 
 export function create(pair: Pair, event: Swapped, transaction: Transaction): PairSwap {
   let pairSwapId = pair.id.concat('-').concat(transaction.id);

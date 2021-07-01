@@ -35,6 +35,8 @@ type Pair @entity {
   token0: Token!
   "token1"
   token1: Token!
+  "highest id"
+  highestId: BigInt!
   "positions"
   positions: [Position!]! @derivedFrom(field: "pair")
   "swaps"
@@ -94,14 +96,35 @@ type PositionState @entity {
   startingSwap: BigInt!
   "last swap"
   lastSwap: BigInt!
+  
   "remaining swaps"
   remainingSwaps: BigInt!
+  "total swapped (from) token to (to) token"
+  swapped: BigInt!
+  "withdrawn from (to) token"
+  withdrawn: BigInt!
+  "remaining liquidity (from) token"
+  remainingLiquidity: BigInt!
+
   "transaction"
   transaction: Transaction!
   "createdAtBlock"
   createdAtBlock: BigInt!
   "createdAtTimestamp"
   createdAtTimestamp: BigInt!
+}
+
+type PositionPairSwap @entity {
+  "position.id-pairSwap.id"
+  id: ID!
+  "position"
+  position: Position!
+  "pair swap"
+  pairSwap: PairSwap!
+  "from amount"
+  used: BigInt!
+  "to amount"
+  swapped: BigInt!
 }
 
 type PairSwap @entity {
