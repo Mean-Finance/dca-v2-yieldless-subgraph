@@ -59,6 +59,8 @@ enum POSITION_STATUS {
 type Position @entity {
   "position.id"
   id: ID!
+  # "user"
+  # user: Bytes!
   "from"
   from: Token!
   "to"
@@ -99,10 +101,10 @@ type PositionState @entity {
   
   "remaining swaps"
   remainingSwaps: BigInt!
-  "total swapped (from) token to (to) token"
-  swapped: BigInt!
-  "withdrawn from (to) token"
-  withdrawn: BigInt!
+  # "total swapped (from) token to (to) token"
+  # swapped: BigInt!
+  # "withdrawn from (to) token"
+  # withdrawn: BigInt!
   "remaining liquidity (from) token"
   remainingLiquidity: BigInt!
 

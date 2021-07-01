@@ -14,8 +14,8 @@ export function create(positionId: string, rate: BigInt, startingSwap: BigInt, l
     positionState.lastSwap = lastSwap;
 
     positionState.remainingSwaps = lastSwap.minus(startingSwap).plus(ONE_BI);
-    positionState.swapped = ZERO_BI;
-    positionState.withdrawn = ZERO_BI;
+    // positionState.swapped = ZERO_BI;
+    // positionState.withdrawn = ZERO_BI;
     positionState.remainingLiquidity = rate.times(positionState.remainingSwaps);
 
     positionState.transaction = transaction.id;
@@ -36,6 +36,7 @@ export function registerPairSwap(id: string): PositionState {
   log.warning('[PositionState] Register pair swap {}', [id]);
   let positionState = get(id);
   positionState.remainingSwaps = positionState.remainingSwaps.minus(ONE_BI);
+  positionState.remainingLiquidity = positionState.remainingLiquidity.minus(positionState.rate);
   // TODO: lastUpdatedAt
   positionState.save();
   return positionState!;
