@@ -1,10 +1,10 @@
 import { log, BigInt } from '@graphprotocol/graph-ts';
-import { Transaction, Position, PairSwap } from '../../generated/schema';
+import { Transaction, Position, PairSwap, Pair, PositionState } from '../../generated/schema';
 import { Deposited, Modified, Terminated } from '../../generated/Factory/Pair';
 import * as pairLibrary from './pair';
 import * as positionStateLibrary from './position-state';
 import * as tokenLibrary from './token';
-import { ONE_BI } from './constants';
+import { ONE_BI, ZERO_BI } from './constants';
 
 export function create(event: Deposited, transaction: Transaction): Position {
   let id = event.params._dcaId.toString();
@@ -63,11 +63,14 @@ export function terminated(event: Terminated, transaction: Transaction): Positio
   return position;
 }
 
-export function registerPairSwap(positionId: string, pairSwap: PairSwap): Position {
+export function registerPairSwap(positionId: string, pair: Pair, pairSwap: PairSwap): Position {
   log.warning('[Position] Register pair swap for position {}', [positionId]);
-  // let pair = pairLibrary.get(pairSwap.pair);
   let position = get(positionId);
-  // Change remaining, etc. on position.
-  let positionState = positionStateLibrary.registerPairSwap(position.current);
+  // We will assume token0 = tokenA
+  if (position.from == pair.token0) {
+    positionStateLibrary.registerPairSwap(position.current, position, pairSwap.ratePerUnitAToB);
+  } else {
+    positionStateLibrary.registerPairSwap(position.current, position, pairSwap.ratePerUnitBToA);
+  }
   return position;
 }

@@ -1,4 +1,4 @@
-import { Address, log } from '@graphprotocol/graph-ts';
+import { Address, log, BigInt } from '@graphprotocol/graph-ts';
 import { Token } from '../../generated/schema';
 import { ERC20 } from '../../generated/Factory/ERC20';
 
@@ -27,4 +27,9 @@ export function getOrCreate(address: Address): Token {
   }
 
   return token!;
+}
+
+export function getMangitudeOf(id: string): BigInt {
+  log.warning('[Token] Get magnitude of {}', [id]);
+  return BigInt.fromI32(18);
 }

@@ -101,11 +101,11 @@ type PositionState @entity {
   
   "remaining swaps"
   remainingSwaps: BigInt!
-  # "total swapped (from) token to (to) token"
-  # swapped: BigInt!
-  # "withdrawn from (to) token"
-  # withdrawn: BigInt!
-  "remaining liquidity (from) token"
+  "total swapped from -> to (expressed in TO token)"
+  swapped: BigInt!
+  "withdrawn (expressed in TO token)"
+  withdrawn: BigInt!
+  "remaining liquidity (expressed in FROM token)"
   remainingLiquidity: BigInt!
 
   "transaction"
