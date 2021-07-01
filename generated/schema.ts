@@ -252,6 +252,15 @@ export class Pair extends Entity {
     this.set("swaps", Value.fromStringArray(value));
   }
 
+  get swapsIntervals(): Array<string> {
+    let value = this.get("swapsIntervals");
+    return value.toStringArray();
+  }
+
+  set swapsIntervals(value: Array<string>) {
+    this.set("swapsIntervals", Value.fromStringArray(value));
+  }
+
   get transaction(): string {
     let value = this.get("transaction");
     return value.toString();
@@ -308,6 +317,15 @@ export class Position extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get user(): Bytes {
+    let value = this.get("user");
+    return value.toBytes();
+  }
+
+  set user(value: Bytes) {
+    this.set("user", Value.fromBytes(value));
   }
 
   get from(): string {
@@ -621,13 +639,13 @@ export class PairSwap extends Entity {
     this.set("borrowedTokenB", Value.fromBigInt(value));
   }
 
-  get pairSwaps(): Array<string> {
-    let value = this.get("pairSwaps");
+  get pairSwapsIntervals(): Array<string> {
+    let value = this.get("pairSwapsIntervals");
     return value.toStringArray();
   }
 
-  set pairSwaps(value: Array<string>) {
-    this.set("pairSwaps", Value.fromStringArray(value));
+  set pairSwapsIntervals(value: Array<string>) {
+    this.set("pairSwapsIntervals", Value.fromStringArray(value));
   }
 
   get availableToBorrowTokenA(): BigInt {
