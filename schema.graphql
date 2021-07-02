@@ -59,8 +59,8 @@ enum POSITION_STATUS {
 type Position @entity {
   "position.id"
   id: ID!
-  # "user"
-  # user: Bytes!
+  "user"
+  user: Bytes!
   "from"
   from: Token!
   "to"
