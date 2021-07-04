@@ -14,6 +14,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
   let from = tokenLibrary.getOrCreate(event.params._fromToken);
   if (position == null) {
     position = new Position(id);
+    position.dcaId = event.params._dcaId.toString();
     position.user = transaction.from!;
     position.from = from.id;
     position.to = position.from == pair.token0 ? pair.token1 : pair.token0;
