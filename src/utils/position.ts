@@ -19,6 +19,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.to = position.from == pair.token0 ? pair.token1 : pair.token0;
     position.pair = pair.id;
     position.swapInterval = event.params._swapInterval.toString();
+    position.totalDeposits = event.params._rate.times(event.params._startingSwap);
     position.status = 'ACTIVE';
     position.transaction = transaction.id;
     position.createdAtBlock = transaction.blockNumber;
@@ -70,8 +71,10 @@ export function modified(event: Modified, transaction: Transaction): Position {
   let id = getIdByPairAddressAndPositionId(event.transaction.to!, event.params._dcaId.toString());
   log.warning('[Position] Modified {}', [id]);
   let position = getById(id);
-  let positionState = positionStateLibrary.create(id, event.params._rate, event.params._startingSwap, event.params._lastSwap, transaction);
-  position.current = positionState.id;
+  let previousPositionState = positionStateLibrary.get(position.current);
+  let newPositionState = positionStateLibrary.create(id, event.params._rate, event.params._startingSwap, event.params._lastSwap, transaction);
+  position.totalDeposits = position.totalDeposits.minus(previousPositionState.remainingLiquidity).plus(newPositionState.remainingLiquidity);
+  position.current = newPositionState.id;
   position.save();
   return position;
 }
