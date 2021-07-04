@@ -57,7 +57,7 @@ enum POSITION_STATUS {
 }
 
 type Position @entity {
-  "position.id"
+  "pair.id-position.id"
   id: ID!
   "user"
   user: Bytes!
