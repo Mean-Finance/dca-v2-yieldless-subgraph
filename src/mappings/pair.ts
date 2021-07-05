@@ -20,7 +20,7 @@ export function handleTerminated(event: Terminated): void {
 
 export function handleWithdrew(event: Withdrew): void {
   let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Withdrew');
-  // positionLibrary.getOrCreate(event, transaction);
+  positionLibrary.withdrew(event, transaction);
 }
 
 export function handleWithdrewMany(event: WithdrewMany): void {

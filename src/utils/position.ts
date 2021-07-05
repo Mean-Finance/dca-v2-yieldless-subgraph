@@ -1,6 +1,6 @@
 import { log, BigInt, Address } from '@graphprotocol/graph-ts';
 import { Transaction, Position, PairSwap, Pair, PositionState } from '../../generated/schema';
-import { Deposited, Modified, Terminated } from '../../generated/Factory/Pair';
+import { Deposited, Modified, Terminated, Withdrew } from '../../generated/Factory/Pair';
 import * as pairLibrary from './pair';
 import * as positionStateLibrary from './position-state';
 import * as tokenLibrary from './token';
@@ -20,6 +20,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.to = position.from == pair.token0 ? pair.token1 : pair.token0;
     position.pair = pair.id;
     position.swapInterval = event.params._swapInterval.toString();
+    position.totalWithdrawn = ZERO_BI;
     position.totalDeposits = event.params._rate.times(event.params._startingSwap);
     position.status = 'ACTIVE';
     position.transaction = transaction.id;
@@ -87,6 +88,16 @@ export function terminated(event: Terminated, transaction: Transaction): Positio
   position.status = 'TERMINATED';
   position.terminatedAtBlock = transaction.blockNumber;
   position.terminatedAtTimestamp = transaction.timestamp;
+  position.save();
+  return position;
+}
+
+export function withdrew(event: Withdrew, transaction: Transaction): Position {
+  let id = getIdByPairAddressAndPositionId(event.transaction.to!, event.params._dcaId.toString());
+  log.warning('[Position] Withdrew {}', [id]);
+  let position = getById(id);
+  positionStateLibrary.registerWithdrew(position.current, event.params._amount);
+  position.totalWithdrawn = position.totalWithdrawn.plus(event.params._amount);
   position.save();
   return position;
 }

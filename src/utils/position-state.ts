@@ -33,6 +33,15 @@ export function get(id: string): PositionState {
   return positionState!;
 }
 
+export function registerWithdrew(id: string, withdrawn: BigInt): PositionState {
+  log.warning('[PositionState] Register withdrew {}', [id]);
+  let positionState = get(id);
+  positionState.withdrawn = positionState.withdrawn.plus(withdrawn);
+  // TODO: lastUpdatedAt
+  positionState.save();
+  return positionState!;
+}
+
 export function registerPairSwap(id: string, position: Position, rateFromTo: BigInt): PositionState {
   log.warning('[PositionState] Register pair swap {}', [id]);
   let positionState = get(id);

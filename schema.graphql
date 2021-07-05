@@ -73,6 +73,8 @@ type Position @entity {
   swapInterval: SwapInterval!
   "total deposits"
   totalDeposits: BigInt!
+  "total withdrawn"
+  totalWithdrawn: BigInt!
   "state"
   current: PositionState!
   "past states"
