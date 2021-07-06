@@ -105,11 +105,17 @@ export function withdrew(event: Withdrew, transaction: Transaction): Position {
 export function registerPairSwap(positionId: string, pair: Pair, pairSwap: PairSwap): Position {
   log.warning('[Position] Register pair swap for position {}', [positionId]);
   let position = getByPairAndPositionId(pair, positionId);
-  // We will assume token0 = tokenA
-  if (position.from == pair.token0) {
-    positionStateLibrary.registerPairSwap(position.current, position, pairSwap.ratePerUnitAToB);
-  } else {
-    positionStateLibrary.registerPairSwap(position.current, position, pairSwap.ratePerUnitBToA);
+  if (shouldRegisterPairSwap(position)) {
+    if (position.from == pair.token0) {
+      positionStateLibrary.registerPairSwap(position.current, position, pairSwap.ratePerUnitAToB);
+    } else {
+      positionStateLibrary.registerPairSwap(position.current, position, pairSwap.ratePerUnitBToA);
+    }
   }
   return position;
+}
+
+function shouldRegisterPairSwap(position: Position): boolean {
+  let currentState = positionStateLibrary.get(position.current);
+  return position.status != 'TERMINATED' && currentState.remainingSwaps.gt(ZERO_BI);
 }
