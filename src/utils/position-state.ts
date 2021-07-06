@@ -42,11 +42,11 @@ export function registerWithdrew(id: string, withdrawn: BigInt): PositionState {
   return positionState!;
 }
 
-export function registerPairSwap(id: string, position: Position, rateFromTo: BigInt): PositionState {
+export function registerPairSwap(id: string, position: Position, swapped: BigInt): PositionState {
   log.warning('[PositionState] Register pair swap {}', [id]);
   let positionState = get(id);
   positionState.remainingSwaps = positionState.remainingSwaps.minus(ONE_BI);
-  positionState.swapped = rateFromTo.times(positionState.rate).div(tokenLibrary.getMangitudeOf(position.from));
+  positionState.swapped = positionState.swapped.plus(swapped);
   positionState.remainingLiquidity = positionState.remainingLiquidity.minus(positionState.rate);
   // TODO: lastUpdatedAt
   positionState.save();

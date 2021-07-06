@@ -75,6 +75,8 @@ type Position @entity {
   totalDeposits: BigInt!
   "total withdrawn"
   totalWithdrawn: BigInt!
+  "total swapped"
+  totalSwapped: BigInt!
   "state"
   current: PositionState!
   "past states"
