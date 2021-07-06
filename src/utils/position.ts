@@ -24,6 +24,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.totalWithdrawn = ZERO_BI;
     position.totalSwapped = ZERO_BI;
     position.totalDeposits = event.params._rate.times(event.params._startingSwap);
+    position.totalSwaps = ZERO_BI;
     position.status = 'ACTIVE';
     position.transaction = transaction.id;
     position.createdAtBlock = transaction.blockNumber;
@@ -113,6 +114,7 @@ export function registerPairSwap(positionId: string, pair: Pair, pairSwap: PairS
     let swapped = rate.times(currentState.rate).div(tokenLibrary.getMangitudeOf(position.from));
     positionStateLibrary.registerPairSwap(position.current, position, swapped);
     position.totalSwapped = position.totalSwapped.plus(swapped);
+    position.totalSwaps = position.totalSwaps.plus(ONE_BI);
     position.save();
   }
   return position;
