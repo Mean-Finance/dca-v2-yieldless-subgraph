@@ -71,6 +71,8 @@ type Position @entity {
   pair: Pair!
   "swap interval"
   swapInterval: SwapInterval!
+  "started at swap"
+  startedAtSwap: BigInt!
   "total deposits"
   totalDeposits: BigInt!
   "total withdrawn"
