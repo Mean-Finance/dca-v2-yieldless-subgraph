@@ -1,6 +1,7 @@
 import { Address, log, BigInt } from '@graphprotocol/graph-ts';
 import { Token } from '../../generated/schema';
 import { ERC20 } from '../../generated/Factory/ERC20';
+import { ONE_BI, ZERO_BI } from './constants';
 
 const DEFAULT_DECIMALS = 18;
 
@@ -31,5 +32,6 @@ export function getOrCreate(address: Address): Token {
 
 export function getMangitudeOf(id: string): BigInt {
   log.warning('[Token] Get magnitude of {}', [id]);
-  return BigInt.fromI32(18);
+  let token = getOrCreate(Address.fromHexString(id) as Address);
+  return BigInt.fromString('10').pow(token.decimals as u8);
 }
