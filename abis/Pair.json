@@ -8,11 +8,6 @@
           "type": "address"
         },
         {
-          "internalType": "contract ISlidingOracle",
-          "name": "_oracle",
-          "type": "address"
-        },
-        {
           "internalType": "contract IERC20Detailed",
           "name": "_tokenA",
           "type": "address"
@@ -812,19 +807,6 @@
           "internalType": "uint32",
           "name": "",
           "type": "uint32"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "oracle",
-      "outputs": [
-        {
-          "internalType": "contract ISlidingOracle",
-          "name": "",
-          "type": "address"
         }
       ],
       "stateMutability": "view",
