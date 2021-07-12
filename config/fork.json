@@ -1,0 +1,7 @@
+{
+  "network": "mainnet",
+  "factoryStartBlock": "12808860",
+  "factory": "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
+  "globalParametersStartBlock": "12808859",
+  "globalParameters": "0x99bba657f2bbc93c02d617f8ba121cb8fc104acf"
+}
