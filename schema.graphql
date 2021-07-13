@@ -31,10 +31,10 @@ type SwapInterval @entity {
 type Pair @entity {
   "address"
   id: ID!
-  "token0"
-  token0: Token!
-  "token1"
-  token1: Token!
+  "tokenA"
+  tokenA: Token!
+  "tokenB"
+  tokenB: Token!
   "highest id"
   highestId: BigInt!
   "positions"

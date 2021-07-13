@@ -78,5 +78,5 @@ templates:
           handler: handleWithdrew
         - event: WithdrewMany(indexed address,uint256[],uint256,uint256)
           handler: handleWithdrewMany
-        - event: Swapped(indexed address,indexed address,uint256,uint256,((uint32,uint32,uint256,uint256)[],uint8,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address))
+        - event: Swapped(indexed address,indexed address,uint256,uint256,uint32,((uint32,uint32,uint256,uint256)[],uint8,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address))
           handler: handleSwapped

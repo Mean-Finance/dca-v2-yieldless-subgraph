@@ -17,7 +17,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.dcaId = event.params._dcaId.toString();
     position.user = transaction.from!;
     position.from = from.id;
-    position.to = position.from == pair.token0 ? pair.token1 : pair.token0;
+    position.to = position.from == pair.tokenA ? pair.tokenB : pair.tokenA;
     position.pair = pair.id;
     position.swapInterval = event.params._swapInterval.toString();
     position.startedAtSwap = event.params._startingSwap;
@@ -112,7 +112,7 @@ export function registerPairSwap(positionId: string, pair: Pair, pairSwap: PairS
   let position = getByPairAndPositionId(pair, positionId);
   let currentState = positionStateLibrary.get(position.current);
   if (shouldRegisterPairSwap(position)) {
-    let rate = position.from == pair.token0 ? pairSwap.ratePerUnitAToB : pairSwap.ratePerUnitBToA;
+    let rate = position.from == pair.tokenA ? pairSwap.ratePerUnitAToB : pairSwap.ratePerUnitBToA;
     let swapped = rate.times(currentState.rate).div(tokenLibrary.getMangitudeOf(position.from));
     positionStateLibrary.registerPairSwap(position.current, position, swapped);
     position.totalSwapped = position.totalSwapped.plus(swapped);

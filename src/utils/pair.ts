@@ -13,12 +13,12 @@ export function create(event: PairCreated, transaction: Transaction): Pair {
   let id = event.params._pair.toHexString();
   log.warning('[Pair] Create {}', [id]);
   let pair = Pair.load(id);
-  let token0 = tokenLibrary.getOrCreate(event.params._token0);
-  let token1 = tokenLibrary.getOrCreate(event.params._token1);
+  let tokenA = tokenLibrary.getOrCreate(event.params._tokenA);
+  let tokenB = tokenLibrary.getOrCreate(event.params._tokenB);
   if (pair == null) {
     pair = new Pair(id);
-    pair.token0 = token0.id;
-    pair.token1 = token1.id;
+    pair.tokenA = tokenA.id;
+    pair.tokenB = tokenB.id;
     pair.highestId = ZERO_BI; // TODO: Remove this patch
     pair.transaction = transaction.id;
     pair.createdAtBlock = transaction.blockNumber;
@@ -42,7 +42,6 @@ export function swapped(event: Swapped, transaction: Transaction): void {
   let pairSwap = pairSwapLibrary.create(pair!, event, transaction);
   // let pairContract = PairContract.bind(event.transaction.to!); // TODO: use other "to" -- learn about type conversion
   for (let i: i32 = 1; i < pair.highestId.toI32(); i++) {
-    // Should probably do some checks ?
     positionLibrary.registerPairSwap(i.toString(), pair, pairSwap);
   }
 }
