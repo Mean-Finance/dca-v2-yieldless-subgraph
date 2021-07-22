@@ -162,8 +162,12 @@ type PairSwap @entity {
   availableToBorrowTokenB: BigInt!
   "rate per unit b to a"
   ratePerUnitBToA: BigInt!
+  "rate per unit b to a with fee subtracted"
+  ratePerUnitBToAWithFee: BigInt!
   "rate per unit a to b"
   ratePerUnitAToB: BigInt!
+  "rate per unit a to b with fee subtracted"
+  ratePerUnitAToBWithFee: BigInt!
   "fee from token a"
   platformFeeTokenA: BigInt!
   "fee from token b"

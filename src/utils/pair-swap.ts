@@ -1,7 +1,6 @@
-import { log } from '@graphprotocol/graph-ts';
+import { log, BigInt } from '@graphprotocol/graph-ts';
 import { Transaction, Pair, PairSwap, PairSwapInterval } from '../../generated/schema';
 import { Swapped } from '../../generated/Factory/Pair';
-import * as positionLibrary from './position';
 
 export function create(pair: Pair, event: Swapped, transaction: Transaction): PairSwap {
   let pairSwapId = pair.id.concat('-').concat(transaction.id);
@@ -17,7 +16,9 @@ export function create(pair: Pair, event: Swapped, transaction: Transaction): Pa
     pairSwap.availableToBorrowTokenA = event.params._nextSwapInformation.availableToBorrowTokenA;
     pairSwap.availableToBorrowTokenB = event.params._nextSwapInformation.availableToBorrowTokenB;
     pairSwap.ratePerUnitBToA = event.params._nextSwapInformation.ratePerUnitBToA;
+    pairSwap.ratePerUnitBToAWithFee = APPLY_FEE(event.params._fee, event.params._nextSwapInformation.ratePerUnitBToA);
     pairSwap.ratePerUnitAToB = event.params._nextSwapInformation.ratePerUnitAToB;
+    pairSwap.ratePerUnitAToBWithFee = APPLY_FEE(event.params._fee, event.params._nextSwapInformation.ratePerUnitAToB);
     pairSwap.platformFeeTokenA = event.params._nextSwapInformation.platformFeeTokenA;
     pairSwap.platformFeeTokenB = event.params._nextSwapInformation.platformFeeTokenB;
     pairSwap.amountToBeProvidedBySwapper = event.params._nextSwapInformation.amountToBeProvidedBySwapper;
@@ -43,4 +44,11 @@ export function create(pair: Pair, event: Swapped, transaction: Transaction): Pa
     }
   }
   return pairSwap!;
+}
+
+function APPLY_FEE(fee: BigInt, amount: BigInt): BigInt {
+  // (_amount * _feeAmount) / _feePrecision / 100;
+  let FEE_PRECISION = BigInt.fromI32(10000);
+  let feeAmount = amount.times(fee).div(FEE_PRECISION.div(BigInt.fromI32(100)));
+  return amount.minus(feeAmount);
 }
