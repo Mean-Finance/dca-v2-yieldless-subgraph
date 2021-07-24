@@ -9,5 +9,5 @@ export function handleSwapIntervalsAllowed(event: SwapIntervalsAllowed): void {
 
 export function handleSwapIntervalsForbidden(event: SwapIntervalsForbidden): void {
   // transactionLibrary.getOrCreateFromEvent(event, 'SwapIntervalsAllowed');
-  // globalParametersLibrary.getOrCreate(event.transaction.to!);
+  // globalParametersLibrary.getOrCreate(event.address);
 }

@@ -7,10 +7,10 @@ import * as tokenLibrary from './token';
 import { ONE_BI, ZERO_BI } from './constants';
 
 export function create(event: Deposited, transaction: Transaction): Position {
-  let id = getIdByPairAddressAndPositionId(event.transaction.to!, event.params._dcaId.toString());
+  let id = getIdByPairAddressAndPositionId(event.address, event.params._dcaId.toString());
   log.warning('[Position] Create {}', [id]);
   let position = Position.load(id);
-  let pair = pairLibrary.get(event.transaction.to.toHexString());
+  let pair = pairLibrary.get(event.address.toHexString());
   let from = tokenLibrary.getOrCreate(event.params._fromToken);
   if (position == null) {
     position = new Position(id);
@@ -75,7 +75,7 @@ export function getById(id: string): Position {
 }
 
 export function modified(event: Modified, transaction: Transaction): Position {
-  let id = getIdByPairAddressAndPositionId(event.transaction.to!, event.params._dcaId.toString());
+  let id = getIdByPairAddressAndPositionId(event.address, event.params._dcaId.toString());
   log.warning('[Position] Modified {}', [id]);
   let position = getById(id);
   let previousPositionState = positionStateLibrary.get(position.current);
@@ -88,7 +88,7 @@ export function modified(event: Modified, transaction: Transaction): Position {
 }
 
 export function terminated(event: Terminated, transaction: Transaction): Position {
-  let id = getIdByPairAddressAndPositionId(event.transaction.to!, event.params._dcaId.toString());
+  let id = getIdByPairAddressAndPositionId(event.address, event.params._dcaId.toString());
   log.warning('[Position] Terminated {}', [id]);
   let position = getById(id);
   position.status = 'TERMINATED';
@@ -99,7 +99,7 @@ export function terminated(event: Terminated, transaction: Transaction): Positio
 }
 
 export function withdrew(event: Withdrew, transaction: Transaction): Position {
-  let id = getIdByPairAddressAndPositionId(event.transaction.to!, event.params._dcaId.toString());
+  let id = getIdByPairAddressAndPositionId(event.address, event.params._dcaId.toString());
   log.warning('[Position] Withdrew {}', [id]);
   let position = getById(id);
   positionStateLibrary.registerWithdrew(position.current, event.params._amount);
