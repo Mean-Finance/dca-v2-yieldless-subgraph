@@ -23,7 +23,6 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.startedAtSwap = event.params._startingSwap;
     position.totalWithdrawn = ZERO_BI;
     position.totalSwapped = ZERO_BI;
-    position.totalDeposits = event.params._rate.times(event.params._startingSwap);
     position.totalSwaps = ZERO_BI;
     position.status = 'ACTIVE';
     position.transaction = transaction.id;
@@ -32,6 +31,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
 
     // Create position state
     let positionState = positionStateLibrary.create(id, event.params._rate, event.params._startingSwap, event.params._lastSwap, transaction);
+    position.totalDeposits = event.params._rate.times(positionState.remainingSwaps);
     position.totalSwaps = positionState.remainingSwaps;
     position.current = positionState.id;
     position.save();
