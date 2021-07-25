@@ -47,8 +47,7 @@ export function create(pair: Pair, event: Swapped, transaction: Transaction): Pa
 }
 
 function APPLY_FEE(fee: BigInt, amount: BigInt): BigInt {
-  // (_amount * _feeAmount) / _feePrecision / 100;
   let FEE_PRECISION = BigInt.fromI32(10000);
-  let feeAmount = amount.times(fee).div(FEE_PRECISION.div(BigInt.fromI32(100)));
+  let feeAmount = amount.times(fee).div(FEE_PRECISION).div(BigInt.fromI32(100));
   return amount.minus(feeAmount);
 }
