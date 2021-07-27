@@ -23,7 +23,6 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.startedAtSwap = event.params._startingSwap;
     position.totalWithdrawn = ZERO_BI;
     position.totalSwapped = ZERO_BI;
-    position.totalSwaps = ZERO_BI;
     position.status = 'ACTIVE';
     position.transaction = transaction.id;
     position.createdAtBlock = transaction.blockNumber;
@@ -112,18 +111,12 @@ export function registerPairSwap(positionId: string, pair: Pair, pairSwap: PairS
   log.warning('[Position] Register pair swap for position {}', [positionId]);
   let position = getByPairAndPositionId(pair, positionId);
   let currentState = positionStateLibrary.get(position.current);
-  if (shouldRegisterPairSwap(position)) {
+  if (position.status != 'TERMINATED' && currentState.remainingSwaps.gt(ZERO_BI)) {
     let rate = position.from == pair.tokenA ? pairSwap.ratePerUnitAToBWithFee : pairSwap.ratePerUnitBToAWithFee;
     let swapped = rate.times(currentState.rate).div(tokenLibrary.getMangitudeOf(position.from));
     positionStateLibrary.registerPairSwap(position.current, position, swapped);
     position.totalSwapped = position.totalSwapped.plus(swapped);
-    position.totalSwaps = position.totalSwaps.plus(ONE_BI);
     position.save();
   }
   return position;
-}
-
-function shouldRegisterPairSwap(position: Position): boolean {
-  let currentState = positionStateLibrary.get(position.current);
-  return position.status != 'TERMINATED' && currentState.remainingSwaps.gt(ZERO_BI);
 }

@@ -1,7 +1,7 @@
 {
   "network": "mainnet",
-  "factoryStartBlock": "12808860",
-  "factory": "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
-  "globalParametersStartBlock": "12808859",
-  "globalParameters": "0x99bba657f2bbc93c02d617f8ba121cb8fc104acf"
+  "factoryStartBlock": "12904288",
+  "factory": "0x5eb3Bc0a489C5A8288765d2336659EbCA68FCd00",
+  "globalParametersStartBlock": "12904286",
+  "globalParameters": "0x9d4454B023096f34B160D6B654540c56A1F81688"
 }

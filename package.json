@@ -4,7 +4,7 @@
   "license": "",
   "scripts": {
     "codegen": "rm -rf generated && graph codegen",
-    "create:fork": "graph create --node http://localhost:8020/ alejoamiras/dca-subgraph",
+    "create:fork": "graph create --node http://3.235.77.84:8020/ alejoamiras/dca-subgraph",
     "build:rinkeby": "yarn prepare:rinkeby && graph build",
     "build:ropsten": "yarn prepare:ropsten && graph build",
     "build:mainnet": "yarn prepare:mainnet && graph build",
@@ -13,7 +13,7 @@
     "thegraph:deploy:rinkeby-stable": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-rinkeby-stable",
     "thegraph:deploy:ropsten": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-ropsten",
     "thegraph:deploy:mainnet": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-mainnet",
-    "thegraph:deploy:fork": "graph deploy --debug --node http://localhost:8020/ --ipfs http://localhost:5001/ alejoamiras/dca-subgraph",
+    "thegraph:deploy:fork": "graph deploy --debug --node http://3.235.77.84:8020/ --ipfs http://3.235.77.84:5001/ alejoamiras/dca-subgraph",
     "prepare:rinkeby": "mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
     "prepare:ropsten": "mustache config/ropsten.json subgraph.template.yaml > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
