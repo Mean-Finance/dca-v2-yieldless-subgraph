@@ -75,9 +75,9 @@ type Position @entity {
   startedAtSwap: BigInt!
   "total deposits"
   totalDeposits: BigInt!
-  "total withdrawn"
+  "total withdrawno expressed in (to)"
   totalWithdrawn: BigInt!
-  "total swapped"
+  "total swapped expressed in (to)"
   totalSwapped: BigInt!
   "total swaps"
   totalSwaps: BigInt!

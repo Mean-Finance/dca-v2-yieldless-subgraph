@@ -44,6 +44,7 @@ dataSources:
       file: ./src/mappings/global-parameters.ts
       entities:
         - GlobalParameters
+        - SwapInterval
         - Transaction
       abis:
         - name: GlobalParameters
@@ -64,6 +65,14 @@ templates:
       file: ./src/mappings/pair.ts
       entities:
         - Pair
+        - Position
+        - PositionState
+        - PairSwap
+        - SwapInterval
+        - PairSwapInterval
+        - PositionPairSwap
+        - Transaction
+        - Token
       abis:
         - name: Pair
           file: ./abis/Pair.json

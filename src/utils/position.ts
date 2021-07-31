@@ -112,8 +112,8 @@ export function registerPairSwap(positionId: string, pair: Pair, pairSwap: PairS
   let position = getByPairAndPositionId(pair, positionId);
   let currentState = positionStateLibrary.get(position.current);
   if (position.status != 'TERMINATED' && currentState.remainingSwaps.gt(ZERO_BI)) {
-    let rate = position.from == pair.tokenA ? pairSwap.ratePerUnitAToBWithFee : pairSwap.ratePerUnitBToAWithFee;
-    let swapped = rate.times(currentState.rate).div(tokenLibrary.getMangitudeOf(position.from));
+    let rateOfSwap = position.from == pair.tokenA ? pairSwap.ratePerUnitAToBWithFee : pairSwap.ratePerUnitBToAWithFee;
+    let swapped = rateOfSwap.times(currentState.rate).div(tokenLibrary.getMangitudeOf(position.from));
     positionStateLibrary.registerPairSwap(position.current, position, swapped);
     position.totalSwapped = position.totalSwapped.plus(swapped);
     position.save();
