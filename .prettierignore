@@ -5,8 +5,7 @@
 .gitignore
 .gitattributes
 .versionrc
-.env
-.env.example
+CHANGELOG.md
 
 # The graph
 generated
