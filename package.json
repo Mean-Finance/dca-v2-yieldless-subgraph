@@ -47,9 +47,9 @@
     "mustache": "4.2.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "12.1.4",
-    "@commitlint/config-conventional": "12.1.4",
-    "husky": "6.0.0",
+    "@commitlint/cli": "13.1.0",
+    "@commitlint/config-conventional": "13.1.0",
+    "husky": "7.0.1",
     "pinst": "2.1.6",
     "prettier": "2.3.2",
     "sort-package-json": "1.50.0",
