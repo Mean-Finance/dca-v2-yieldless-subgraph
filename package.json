@@ -12,7 +12,7 @@
     "thegraph:deploy:rinkeby": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-rinkeby",
     "thegraph:deploy:rinkeby-stable": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-rinkeby-stable",
     "thegraph:deploy:ropsten": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-ropsten",
-    "thegraph:deploy:mainnet": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-mainnet",
+    "thegraph:deploy:mainnet": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ alejoamiras/dca-v1",
     "thegraph:deploy:fork": "graph deploy --debug --node http://3.235.77.84:8020/ --ipfs http://3.235.77.84:5001/ alejoamiras/dca-subgraph",
     "prepare:rinkeby": "mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
     "prepare:ropsten": "mustache config/ropsten.json subgraph.template.yaml > subgraph.yaml",
