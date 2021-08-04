@@ -1,4 +1,4 @@
-import { log, BigInt, Address } from '@graphprotocol/graph-ts';
+import { log, BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
 import { Transaction, Position, PairSwap, Pair, PositionState } from '../../generated/schema';
 import {
   Deposited,
@@ -157,7 +157,7 @@ export function transfer(event: Transfer, transaction: Transaction): Position {
   let id = getIdByPairAddressAndPositionId(event.address, event.params.tokenId.toString());
   log.info('[Position] Transfer {}', [id]);
   let position = getById(id);
-  position.user = event.params.to;
+  position.user = event.params.to as Bytes;
   position.save();
   return position;
 }

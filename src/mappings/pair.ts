@@ -2,6 +2,7 @@ import * as transactionLibrary from '../utils/transaction';
 import * as pairLibrary from '../utils/pair';
 import * as positionLibrary from '../utils/position';
 import { Deposited, Modified, Swapped, Terminated, Withdrew, WithdrewMany, Transfer } from '../../generated/Factory/Pair';
+import { ADDRESS_ZERO } from '../utils/constants';
 
 export function handleDeposited(event: Deposited): void {
   let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Deposited');
@@ -34,6 +35,8 @@ export function handleSwapped(event: Swapped): void {
 }
 
 export function handlePositionTransfer(event: Transfer): void {
-  let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Swapped');
-  positionLibrary.transfer(event, transaction);
+  if (event.params.from.toHexString() != ADDRESS_ZERO) {
+    let transaction = transactionLibrary.getOrCreateFromEvent(event, 'Transfer');
+    positionLibrary.transfer(event, transaction);
+  }
 }
