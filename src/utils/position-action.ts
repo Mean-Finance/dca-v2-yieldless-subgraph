@@ -146,10 +146,18 @@ export function terminated(positionId: string, transaction: Transaction): Positi
   return positionAction;
 }
 
-export function swapped(positionId: string, swapped: BigInt, rate: BigInt, pairSwap: PairSwap, transaction: Transaction): PositionAction {
+export function swapped(
+  positionId: string,
+  magnitude: BigInt,
+  rateOfSwap: BigInt,
+  rate: BigInt,
+  pairSwap: PairSwap,
+  transaction: Transaction
+): PositionAction {
   let id = positionId.concat('-').concat(transaction.id);
   log.info('[PositionAction] Swapped {}', [id]);
   let positionAction = PositionAction.load(id);
+  let swapped = rateOfSwap.times(rate).div(magnitude);
   if (positionAction == null) {
     positionAction = new PositionAction(id);
     positionAction.position = positionId;
