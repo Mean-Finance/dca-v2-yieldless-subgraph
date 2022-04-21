@@ -120,7 +120,7 @@ export function registerPairSwap(id: string, position: Position, ratio: BigInt):
   let augmentedSwapped = positionState.rateAccumulator.times(positionState.rate);
   let totalSwapped = augmentedSwapped.div(magnitude);
 
-  positionState.swapped = positionState.swapped.plus(totalSwapped);
+  positionState.swapped = positionState.swappedBeforeModified.plus(totalSwapped);
   positionState.idleSwapped = positionState.swapped.minus(positionState.withdrawn);
 
   positionState.remainingSwaps = positionState.remainingSwaps.minus(ONE_BI);
