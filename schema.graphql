@@ -187,9 +187,9 @@ type PositionAction @entity {
   withdrawn: BigInt
 
   "rate per unit b to a with fee subtracted"
-  ratePerUnitBToAWithFee: BigInt!
+  ratePerUnitBToAWithFee: BigInt
   "rate per unit a to b with fee subtracted"
-  ratePerUnitAToBWithFee: BigInt!
+  ratePerUnitAToBWithFee: BigInt
 
   "transaction"
   transaction: Transaction!
@@ -247,8 +247,8 @@ type PairSwapInterval @entity {
   pairSwap: PairSwap!
   "swap interval"
   swapInterval: SwapInterval!
-  "swap performed"
-  swapPerformed: BigInt!
+  # "swap performed"
+  # swapPerformed: BigInt!
   # "amount to swap token a"
   # amountToSwapTokenA: BigInt!
   # "amount to swap token b"
@@ -285,10 +285,14 @@ type Transaction @entity {
 type Token @entity {
   "Token address"
   id: ID!
-  "Number of decimals for this Token"
-  decimals: Int!
   "Name of the Token"
   name: String!
   "Symbol of the Token"
   symbol: String!
+  "Allowed"
+  allowed: Boolean!
+  "Decimals"
+  decimals: Int!
+  "Magnitude"
+  magnitude: BigInt!
 }
