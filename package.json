@@ -15,12 +15,15 @@
     }
   ],
   "scripts": {
+    "build:arbitrum": "yarn prepare:arbitrum && graph build",
     "build:ethereum-kovan": "yarn prepare:ethereum-kovan && graph build",
     "build:mumbai": "yarn prepare:mumbai && graph build",
     "build:optimism": "yarn prepare:optimism && graph build",
     "build:optimism-kovan": "yarn prepare:optimism-kovan && graph build",
     "build:polygon": "yarn prepare:polygon && graph build",
     "codegen": "rm -rf generated && graph codegen",
+    "deploy:arbitrum:mainnet": "yarn build:arbitrum && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-arbitrum-canary",
+    "deploy:arbitrum:mainnet:stable": "yarn build:arbitrum && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-arbitrum",
     "deploy:ethereum:kovan": "yarn build:ethereum-kovan && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-ethereum-kovan-canary",
     "deploy:ethereum:kovan:stable": "yarn build:ethereum-kovan && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-ethereum-kovan",
     "deploy:mumbai": "yarn build:mumbai && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-mumbai-canary",
@@ -34,6 +37,7 @@
     "lint:check": "prettier --check './**'",
     "lint:fix": "sort-package-json && prettier --write './**'",
     "prepare": "husky install",
+    "prepare:arbitrum": "mustache config/arbitrum.json subgraph.template.yaml > subgraph.yaml",
     "prepare:ethereum-kovan": "mustache config/ethereum-kovan.json subgraph.template.yaml > subgraph.yaml",
     "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml",
     "prepare:optimism": "mustache config/optimism.json subgraph.template.yaml > subgraph.yaml",
