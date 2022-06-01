@@ -1,4 +1,4 @@
-name: Deploy to all canary subgraphs
+name: Deploy all canaries
 
 on:
   workflow_dispatch:
