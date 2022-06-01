@@ -8,9 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        network-name: ["arbtrium", "mumbai", "optimism", "polygon"]
-        network-deploy-script:
-          ["arbitrum:mainnet", "mumbai", "optimism:mainnet", "polygon"]
+        networks:
+          [
+            { name: "arbitrum", deploy-script: "arbitrum:mainnet" },
+            { name: "mumbai", deploy-script: "mumbai" },
+            { name: "optimism", deploy-script: "optimism:mainnet" },
+            { name: "polygon", deploy-script: "polygon" },
+          ]
     steps:
       - name: Check out github repository
         uses: actions/checkout@v2
@@ -42,5 +46,5 @@ jobs:
       - name: Generating code
         run: yarn codegen
 
-      - name: Deploying subgraph to ${{ matrix.network-name }}
-        run: yarn deploy:${{ matrix.network-deploy-script }}
+      - name: Deploying subgraph to ${{ matrix.networks.name }}
+        run: yarn deploy:${{ matrix.networks.deploy-script }}
