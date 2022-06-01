@@ -32,6 +32,8 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: Prepare subgraph
+        # This could be any random network since we don't test
+        # any network specific stuff
         run: yarn prepare:optimism
 
       - name: Generating code

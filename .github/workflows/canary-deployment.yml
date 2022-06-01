@@ -44,8 +44,5 @@ jobs:
       - name: Login to hosted service
         run: graph auth --product hosted-service ${{ secrets.ACCESS_TOKEN }}
 
-      - name: Generating code
-        run: yarn codegen
-
       - name: Deploy subgraph
         run: yarn deploy:${{ github.event.inputs.network }}

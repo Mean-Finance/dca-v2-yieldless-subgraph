@@ -15,12 +15,12 @@
     }
   ],
   "scripts": {
-    "build:arbitrum": "yarn prepare:arbitrum && graph build",
-    "build:ethereum-kovan": "yarn prepare:ethereum-kovan && graph build",
-    "build:mumbai": "yarn prepare:mumbai && graph build",
-    "build:optimism": "yarn prepare:optimism && graph build",
-    "build:optimism-kovan": "yarn prepare:optimism-kovan && graph build",
-    "build:polygon": "yarn prepare:polygon && graph build",
+    "build:arbitrum": "yarn prepare:arbitrum && yarn codegen && graph build",
+    "build:ethereum-kovan": "yarn prepare:ethereum-kovan && yarn codegen && graph build",
+    "build:mumbai": "yarn prepare:mumbai && yarn codegen && graph build",
+    "build:optimism": "yarn prepare:optimism && yarn codegen && graph build",
+    "build:optimism-kovan": "yarn prepare:optimism-kovan && yarn codegen && graph build",
+    "build:polygon": "yarn prepare:polygon && yarn codegen && graph build",
     "codegen": "rm -rf generated && graph codegen",
     "deploy:arbitrum:mainnet": "yarn build:arbitrum && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-arbitrum-canary",
     "deploy:arbitrum:mainnet:stable": "yarn build:arbitrum && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-arbitrum",

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       network:
-        description: "The subgraph's network to update"
+        description: "Subgraphs network to update"
         required: true
         type: choice
         options:
@@ -43,9 +43,6 @@ jobs:
 
       - name: Login to hosted service
         run: graph auth --product hosted-service ${{ secrets.ACCESS_TOKEN }}
-
-      - name: Generating code
-        run: yarn codegen
 
       - name: Deploy subgraph
         run: yarn deploy:${{ github.event.inputs.network }}:stable
