@@ -62,7 +62,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.current = positionState.id;
     position.save();
 
-    pairLibrary.addActivePosition(position);
+    pairLibrary.addActivePosition(position, positionState.rate);
   }
   return position;
 }
@@ -96,11 +96,12 @@ export function modified(event: Modified, transaction: Transaction): Position {
   position.current = newPositionState.id;
   // Remove position from active pairs if modified to have zero remaining swaps (soft termination)
   if (newPositionState.remainingSwaps.equals(ZERO_BI)) {
-    pairLibrary.removeActivePosition(position);
+    pairLibrary.removeActivePosition(position, newPositionState.rate);
     position.status = 'COMPLETED';
   } else {
     position.status = 'ACTIVE';
-    pairLibrary.addActivePosition(position);
+    // send diff of rate
+    pairLibrary.addActivePosition(position, previousPositionState.rate.minus(newPositionState.rate));
   }
   position.save();
   //
@@ -143,6 +144,7 @@ export function terminated(event: Terminated, transaction: Transaction): Positio
   let id = event.params.positionId.toString();
   log.info('[Position] Terminated {}', [id]);
   let position = getById(id);
+  let positionState = positionStateLibrary.get(position.current);
   position.status = 'TERMINATED';
   position.terminatedAtBlock = transaction.blockNumber;
   position.terminatedAtTimestamp = transaction.timestamp;
@@ -156,7 +158,7 @@ export function terminated(event: Terminated, transaction: Transaction): Positio
   position.save();
 
   // Remove position from actives
-  pairLibrary.removeActivePosition(position);
+  pairLibrary.removeActivePosition(position, positionState.rate);
 
   return position;
 }
