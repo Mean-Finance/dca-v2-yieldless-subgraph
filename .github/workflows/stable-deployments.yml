@@ -1,4 +1,4 @@
-name: Deploy all canaries
+name: Deploy all stables
 
 on:
   workflow_dispatch:
@@ -45,4 +45,4 @@ jobs:
         run: graph auth --product hosted-service ${{ secrets.ACCESS_TOKEN }}
 
       - name: Deploying subgraph to ${{ matrix.networks.name }}
-        run: yarn deploy:${{ matrix.networks.deploy-script }}
+        run: yarn deploy:${{ matrix.networks.deploy-script }}:stable
