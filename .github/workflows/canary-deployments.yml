@@ -1,6 +1,9 @@
 name: Deploy all canaries
 
 on:
+  push:
+    branches:
+      - dev
   workflow_dispatch:
 
 jobs:
