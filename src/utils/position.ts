@@ -62,7 +62,8 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.current = positionState.id;
     position.save();
 
-    pairLibrary.addActivePosition(position, positionState.rate);
+    pairLibrary.addActivePosition(position);
+    pairLibrary.addAmountToSwap(position, positionState.rate);
   }
   return position;
 }
@@ -94,14 +95,29 @@ export function modified(event: Modified, transaction: Transaction): Position {
   position.totalDeposits = position.totalDeposits.minus(previousPositionState.remainingLiquidity).plus(newPositionState.remainingLiquidity);
   position.totalSwaps = position.totalSwaps.minus(previousPositionState.remainingSwaps).plus(newPositionState.remainingSwaps);
   position.current = newPositionState.id;
+  let oldPositionStatus = position.status;
   // Remove position from active pairs if modified to have zero remaining swaps (soft termination)
   if (newPositionState.remainingSwaps.equals(ZERO_BI)) {
-    pairLibrary.removeActivePosition(position, newPositionState.rate);
+    pairLibrary.removeActivePosition(position);
+    pairLibrary.substractAmountToSwap(position, oldPositionRate);
     position.status = 'COMPLETED';
   } else {
     position.status = 'ACTIVE';
+    pairLibrary.addActivePosition(position);
+
     // send diff of rate
-    pairLibrary.addActivePosition(position, previousPositionState.rate.minus(newPositionState.rate));
+    // basically it went from being anything to active
+    if (oldPositionStatus != position.status) {
+      // we just need to set the new rate
+      pairLibrary.addAmountToSwap(position, newPositionState.rate);
+    } else {
+      // we need to either remove or add the difference
+      if (oldPositionRate.gt(newPositionState.rate)) {
+        pairLibrary.substractAmountToSwap(position, oldPositionRate.minus(newPositionState.rate));
+      } else {
+        pairLibrary.addAmountToSwap(position, newPositionState.rate.minus(oldPositionRate));
+      }
+    }
   }
   position.save();
   //
@@ -158,7 +174,8 @@ export function terminated(event: Terminated, transaction: Transaction): Positio
   position.save();
 
   // Remove position from actives
-  pairLibrary.removeActivePosition(position, positionState.rate);
+  pairLibrary.removeActivePosition(position);
+  pairLibrary.substractAmountToSwap(position, positionState.rate);
 
   return position;
 }
