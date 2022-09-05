@@ -49,6 +49,7 @@ enum POSITION_STATUS {
 type Position @entity {
   "pair.id-position.id"
   id: ID!
+  
   "user"
   user: Bytes!
   "from"
@@ -59,8 +60,12 @@ type Position @entity {
   pair: Pair!
   "swap interval"
   swapInterval: SwapInterval!
-  "started at swap"
-  startedAtSwap: BigInt!
+
+  "permissions"
+  permissions: [PositionPermission!]!
+  "position status"
+  status: POSITION_STATUS!
+
   "total deposits"
   totalDeposits: BigInt!
   "total withdrawno expressed in (to)"
@@ -70,15 +75,15 @@ type Position @entity {
   "total swaps"
   totalSwaps: BigInt!
   "times it was swapped"
-  executedSwaps: BigInt!
+  totalExecutedSwaps: BigInt!
+
   "state"
   current: PositionState!
   "past states"
   history: [PositionState!]! @derivedFrom(field: "position")
   "actions"
   actionsHistory: [PositionAction!]! @derivedFrom(field: "position")
-  "position status"
-  status: POSITION_STATUS!
+  
   "transaction"
   transaction: Transaction!
   "created at block"
@@ -96,8 +101,6 @@ type PositionState @entity {
   id: ID!
   "position"
   position: Position!
-  "permissions"
-  permissions: [PositionPermission!]!
 
   "rate"
   rate: BigInt!
@@ -132,7 +135,7 @@ type PositionState @entity {
 }
 
 type PositionPermission @entity {
-  "positionState.id-user.address"
+  "position.id-operator.address"
   id: ID!
   "operator"
   operator: Bytes!
