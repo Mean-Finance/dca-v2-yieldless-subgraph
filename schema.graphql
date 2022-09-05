@@ -60,8 +60,8 @@ type Position @entity {
   "position status"
   status: POSITION_STATUS!
 
-  "total deposits"
-  totalDeposits: BigInt!
+  "total deposited expressed in (from)"
+  totalDeposited: BigInt!
   "total withdrawno expressed in (to)"
   totalWithdrawn: BigInt!
   "total swapped expressed in (to)"

@@ -46,7 +46,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
     // Create position action
     positionActionLibrary.create(id, event.params.rate, event.params.startingSwap, event.params.lastSwap, position.permissions, transaction);
 
-    position.totalDeposits = event.params.rate.times(positionState.remainingSwaps);
+    position.totalDeposited = event.params.rate.times(positionState.remainingSwaps);
     position.totalSwaps = positionState.remainingSwaps;
     position.current = positionState.id;
     position.save();
@@ -79,7 +79,7 @@ export function modified(event: Modified, transaction: Transaction): Position {
   );
   let oldPositionRate = previousPositionState.rate;
   let oldRemainingSwaps = previousPositionState.remainingSwaps;
-  position.totalDeposits = position.totalDeposits.minus(previousPositionState.remainingLiquidity).plus(newPositionState.remainingLiquidity);
+  position.totalDeposited = position.totalDeposited.minus(previousPositionState.remainingLiquidity).plus(newPositionState.remainingLiquidity);
   position.totalSwaps = position.totalSwaps.minus(previousPositionState.remainingSwaps).plus(newPositionState.remainingSwaps);
   position.current = newPositionState.id;
   let oldPositionStatus = position.status;
