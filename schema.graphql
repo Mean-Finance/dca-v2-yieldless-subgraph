@@ -73,10 +73,8 @@ type Position @entity {
 
   "state"
   current: PositionState!
-  "past states"
-  history: [PositionState!]! @derivedFrom(field: "position")
   "actions"
-  actionsHistory: [PositionAction!]! @derivedFrom(field: "position")
+  history: [PositionAction!]! @derivedFrom(field: "position")
   
   "transaction"
   transaction: Transaction!
