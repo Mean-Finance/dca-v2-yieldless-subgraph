@@ -19,7 +19,6 @@ export function create(id: string, token0Address: Address, token1Address: Addres
     pair.tokenB = token0ComesFirst ? token1.id : token0.id;
     pair.activePositionIds = new Array<string>();
     pair.activePositionsPerInterval = [ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI];
-    pair.nextSwapAvailableAt = MAX_BI;
     pair.lastSwappedAt = [ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI, ZERO_BI];
     pair.transaction = transaction.id;
     pair.createdAtBlock = transaction.blockNumber;
@@ -89,7 +88,6 @@ export function swapped(event: Swapped, transaction: Transaction): void {
     pair.activePositionIds = newActivePositionIds;
     pair.activePositionsPerInterval = newActivePositionsPerInterval;
     pair.lastSwappedAt = newLastSwappedAt;
-    pair.nextSwapAvailableAt = getNextSwapAvailableAt(newActivePositionsPerInterval, pair.lastSwappedAt);
     pair.save();
   }
 } // O (n*2m) ?
@@ -114,8 +112,6 @@ export function addActivePosition(position: Position): Pair {
     let activePositionsPerInterval = pair.activePositionsPerInterval;
     activePositionsPerInterval[indexOfPositionInterval] = activePositionsPerInterval[indexOfPositionInterval].plus(ONE_BI);
     pair.activePositionsPerInterval = activePositionsPerInterval;
-    // Get new next swap available at
-    pair.nextSwapAvailableAt = getNextSwapAvailableAt(activePositionsPerInterval, pair.lastSwappedAt);
 
     pair.save();
   }
@@ -138,22 +134,7 @@ export function removeActivePosition(position: Position): Pair {
     activePositionsPerInterval[indexOfPositionInterval] = activePositionsPerInterval[indexOfPositionInterval].minus(ONE_BI);
     pair.activePositionsPerInterval = activePositionsPerInterval;
 
-    // Get new next swap available at
-    pair.nextSwapAvailableAt = getNextSwapAvailableAt(activePositionsPerInterval, pair.lastSwappedAt);
-
     pair.save();
   }
   return pair;
-}
-
-export function getNextSwapAvailableAt(activePositionsPerInterval: BigInt[], lastSwappedAt: BigInt[]): BigInt {
-  let intervals = getIntervals();
-  let indexOfSmallerInterval = activePositionsPerInterval.length + 1;
-  let i: i32 = 0;
-  while (i < activePositionsPerInterval.length && indexOfSmallerInterval == activePositionsPerInterval.length + 1) {
-    if (activePositionsPerInterval[i].gt(ZERO_BI)) indexOfSmallerInterval = i;
-    i++;
-  }
-  if (indexOfSmallerInterval == activePositionsPerInterval.length + 1) return MAX_BI;
-  return lastSwappedAt[indexOfSmallerInterval].div(intervals[indexOfSmallerInterval]).plus(ONE_BI).times(intervals[indexOfSmallerInterval]);
 }
