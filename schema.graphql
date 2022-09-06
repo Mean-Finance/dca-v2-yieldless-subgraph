@@ -74,7 +74,7 @@ type Position @entity {
   "state"
   current: PositionState!
   "actions"
-  history: [PositionAction!]! @derivedFrom(field: "position")
+  history: [PositionActionInterface!]! @derivedFrom(field: "position")
   
   "transaction"
   transaction: Transaction!
@@ -111,7 +111,7 @@ type PositionState @entity {
   # Mimic on-chain swapped amounts
   "swapped before modified"
   swappedBeforeModified: BigInt!
-  "ratio accumulator. refers to rate accumulator"
+  "ratio accumulator. refers to on-chain rate accumulator"
   ratioAccumulator: BigInt!
 
   "transaction"
@@ -120,6 +120,13 @@ type PositionState @entity {
   createdAtBlock: BigInt!
   "createdAtTimestamp"
   createdAtTimestamp: BigInt!
+}
+
+enum PERMISSION {
+  INCREASE,
+  REDUCE,
+  WITHDRAW,
+  TERMINATE
 }
 
 type PositionPermission @entity {
@@ -131,69 +138,6 @@ type PositionPermission @entity {
   permissions: [PERMISSION!]!
 }
 
-enum PERMISSION {
-  INCREASE,
-  REDUCE,
-  WITHDRAW,
-  TERMINATE
-}
-
-enum ACTION {
-  PERMISSIONS_MODIFIED
-  MODIFIED_RATE
-  MODIFIED_DURATION
-  MODIFIED_RATE_AND_DURATION
-  WITHDREW
-  SWAPPED
-  TRANSFERED
-  CREATED
-  TERMINATED
-}
-
-type PositionAction @entity {
-  "position.id-tx.hash-tx.index"
-  id: ID!
-  "position"
-  position: Position!
-  "action that caused the modification"
-  action: ACTION!
-  "actor who executed the action"
-  actor: Bytes
-  "when transfering who transfers"
-  from: Bytes
-  "when transfering to whom it transfers"
-  to: Bytes
-
-  "new permissions set"
-  permissions: [PositionPermission!]
-
-  "rate"
-  rate: BigInt
-  "previous rate"
-  oldRate: BigInt
-  "remaining swaps"
-  remainingSwaps: BigInt
-  "previous remaining swaps"
-  oldRemainingSwaps: BigInt
-
-  "swapped (is this necesarry? swapped = rate, always)"
-  swapped: BigInt
-  "withdrawn (expressed in TO token)"
-  withdrawn: BigInt
-
-  "rate per unit b to a with fee subtracted"
-  ratioPerUnitBToAWithFee: BigInt
-  "rate per unit a to b with fee subtracted"
-  ratioPerUnitAToBWithFee: BigInt
-
-  "transaction"
-  transaction: Transaction!
-  "createdAtBlock"
-  createdAtBlock: BigInt!
-  "createdAtTimestamp"
-  createdAtTimestamp: BigInt!
-}
-
 type PairSwap @entity {
   "pair.address-transaction.hash"
   id: ID!
@@ -203,13 +147,13 @@ type PairSwap @entity {
   swapper: Bytes!
   "pair swap intervals"
   pairSwapsIntervals: [PairSwapInterval!]! @derivedFrom(field: "pairSwap")
-  "rate per unit b to a"
+  "ratio unit b to a"
   ratioPerUnitBToA: BigInt!
-  "rate per unit b to a with fee subtracted"
+  "ratio unit b to a with fee subtracted"
   ratioPerUnitBToAWithFee: BigInt!
-  "rate per unit a to b"
+  "ratio unit a to b"
   ratioPerUnitAToB: BigInt!
-  "rate per unit a to b with fee subtracted"
+  "ratio unit a to b with fee subtracted"
   ratioPerUnitAToBWithFee: BigInt!
   "executed with transaction"
   transaction: Transaction!
@@ -228,6 +172,242 @@ type PairSwapInterval @entity {
   pairSwap: PairSwap!
   "swap interval"
   swapInterval: SwapInterval!
+}
+
+enum ACTION {
+  PERMISSIONS_MODIFIED # done
+  MODIFIED_RATE # done
+  MODIFIED_DURATION # done
+  MODIFIED_RATE_AND_DURATION # done
+  WITHDREW # done
+  SWAPPED # done
+  TRANSFERED # done
+  CREATED # done
+  TERMINATED
+}
+
+interface PositionActionInterface {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type PermissionsModifiedAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+
+  "new permissions set"
+  permissions: [PositionPermission!]!
+
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type ModifiedRateAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+
+  "rate"
+  rate: BigInt!
+  "previous rate"
+  oldRate: BigInt!
+
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type ModifiedDurationAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+
+  "remaining swaps"
+  remainingSwaps: BigInt!
+  "previous remaining swaps"
+  oldRemainingSwaps: BigInt!
+
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type ModifiedRateAndDurationAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+
+  "rate"
+  rate: BigInt!
+  "previous rate"
+  oldRate: BigInt!
+  "remaining swaps"
+  remainingSwaps: BigInt!
+  "previous remaining swaps"
+  oldRemainingSwaps: BigInt!
+
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type WithdrewAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+
+  "withdrawn (expressed in TO token)"
+  withdrawn: BigInt!
+
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type SwappedAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+
+  "swapped (expressed in to)"
+  swapped: BigInt
+  "rate (expressed in from)"
+  rate: BigInt
+
+  "ratio unit b to a with fee subtracted"
+  ratioPerUnitBToAWithFee: BigInt
+  "ratio unit a to b with fee subtracted"
+  ratioPerUnitAToBWithFee: BigInt
+
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type TransferedAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+
+  "who transfers"
+  from: Bytes!
+  "to whom it transfers"
+  to: Bytes!
+
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type CreatedAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+
+  "rate"
+  rate: BigInt!
+  "remaining swaps"
+  remainingSwaps: BigInt!
+  "permissions set"
+  permissions: [PositionPermission!]!
+
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
+}
+
+type TerminatedAction implements PositionActionInterface @entity {
+  "position.id-tx.hash-tx.index"
+  id: ID!
+  "position"
+  position: Position!
+  "action that caused the modification"
+  action: ACTION!
+  "actor who executed the action"
+  actor: Bytes!
+  "transaction"
+  transaction: Transaction!
+  "createdAtBlock"
+  createdAtBlock: BigInt!
+  "createdAtTimestamp"
+  createdAtTimestamp: BigInt!
 }
 
 type Transaction @entity {
@@ -265,3 +445,4 @@ type Token @entity {
   "Magnitude"
   magnitude: BigInt!
 }
+
