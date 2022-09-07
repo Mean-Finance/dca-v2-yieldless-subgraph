@@ -211,8 +211,8 @@ export function permissionsModified(event: PermissionsModified, transaction: Tra
 }
 
 export class PositionAndPositionState {
-  _position: Position;
-  _positionState: PositionState;
+  private _position: Position;
+  private _positionState: PositionState;
 
   constructor(position: Position, positionState: PositionState) {
     this._position = position;

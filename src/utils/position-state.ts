@@ -100,8 +100,8 @@ export function registerPairSwap(id: string, position: Position, ratio: BigInt):
 }
 
 export class PositionStateAndModifiedPermissions {
-  _positionState: PositionState;
-  _modifiedPermissions: string[];
+  private _positionState: PositionState;
+  private _modifiedPermissions: string[];
 
   constructor(positionState: PositionState, modifiedPermissions: string[]) {
     this._positionState = positionState;
