@@ -1,15 +1,18 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { clearStore, test, assert } from 'matchstick-as/assembly/index';
+import { clearStore, test, assert, describe } from 'matchstick-as/assembly/index';
 import { Token } from '../../generated/schema';
 import { handleSetAllowedTokens } from '../../src/mappings/hub';
-import { createTokensAllowedUpdatedEvent } from '../utils/event-utils';
-import { mockTokenContract } from '../utils/contract-utils';
+import { createTokensAllowedUpdatedEvent } from '../test-utils/event-utils';
+import { mockTokenContract } from '../test-utils/token';
+import { mockTransformerRegistry } from '../test-utils/transformer-registry';
+import { ADDRESS_ZERO } from '../../src/utils/constants';
 
 let TOKEN_ENTITY_TYPE = 'Token';
 let token1 = '0x0000000000000000000000000000000000000001';
 
 test('First time tokens are updated', () => {
   mockTokenContract(token1, 'Token 1', 'T1', 15);
+  mockTransformerRegistry([Address.fromString(token1)], [ADDRESS_ZERO]);
   assert.entityCount(TOKEN_ENTITY_TYPE, 0);
   handleSetAllowedTokens(createTokensAllowedUpdatedEvent([Address.fromString(token1)], [true]));
   assert.entityCount(TOKEN_ENTITY_TYPE, 1);

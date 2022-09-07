@@ -431,6 +431,12 @@ type Transaction @entity {
   blockNumber: BigInt!
 }
 
+enum TOKEN_TYPE {
+  BASE
+  WRAPPED_PROTOCOL_TOKEN
+  YIELD_BEARING_SHARE
+}
+
 type Token @entity {
   "Token address"
   id: ID!
@@ -444,5 +450,9 @@ type Token @entity {
   decimals: Int!
   "Magnitude"
   magnitude: BigInt!
+  "Type of token"
+  type: TOKEN_TYPE!
+  "Underlying tokens"
+  underlyingTokens: [Token!]
 }
 
