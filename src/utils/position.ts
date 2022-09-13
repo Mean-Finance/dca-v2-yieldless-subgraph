@@ -86,6 +86,7 @@ export function modified(event: Modified, transaction: Transaction): Position {
   const previousRemainingSwaps = position.remainingSwaps;
   const previousRemainingLiquidity = position.remainingLiquidity;
   const previousToWithdraw = position.toWithdraw;
+  const previousDepositedRateUnderlying = position.depositedRateUnderlying;
 
   // Re-assign current position state
   position.rate = event.params.rate;
@@ -134,14 +135,36 @@ export function modified(event: Modified, transaction: Transaction): Position {
       event.params.rate,
       event.params.startingSwap,
       event.params.lastSwap,
+      position.depositedRateUnderlying,
       previousPositionRate,
       previousRemainingSwaps,
+      previousDepositedRateUnderlying,
       transaction
     );
   } else if (!previousPositionRate.equals(event.params.rate)) {
-    positionActionLibrary.modifiedRate(id, event.params.rate, previousPositionRate, transaction);
+    positionActionLibrary.modifiedRate(
+      id,
+      event.params.rate,
+      event.params.startingSwap,
+      event.params.lastSwap,
+      position.depositedRateUnderlying,
+      previousPositionRate,
+      previousRemainingSwaps,
+      previousDepositedRateUnderlying,
+      transaction
+    );
   } else {
-    positionActionLibrary.modifiedDuration(id, event.params.startingSwap, event.params.lastSwap, previousRemainingSwaps, transaction);
+    positionActionLibrary.modifiedDuration(
+      id,
+      event.params.rate,
+      event.params.startingSwap,
+      event.params.lastSwap,
+      position.depositedRateUnderlying,
+      previousPositionRate,
+      previousRemainingSwaps,
+      previousDepositedRateUnderlying,
+      transaction
+    );
   }
   return position;
 }
@@ -184,7 +207,7 @@ export function withdrew(positionId: string, transaction: Transaction): Position
   position.save();
   //
   // Position action
-  positionActionLibrary.withdrew(positionId, previousToWithdraw, transaction);
+  positionActionLibrary.withdrew(position, previousToWithdraw, transaction);
   //
   return position;
 }
