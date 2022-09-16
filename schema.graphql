@@ -68,9 +68,9 @@ type Position @entity {
   remainingSwaps: BigInt!
   "current amount that can be withdrawn (expressed in TO token)"
   toWithdraw: BigInt!
-  "accum of the swapped, in terms of the underlying. calculated at the moment of the swap"
+  "accum of the swapped, in terms of the underlying. underlying priced at the moment of the swap"
   totalSwappedUnderlyingAccum: BigInt
-  "accum of the swapped that has not been withdrawn, in terms of the underlying. calculated at the moment of the swap"
+  "accum of the swapped that has not been withdrawn, in terms of the underlying. underlying priced at the moment of the swap"
   toWithdrawUnderlyingAccum: BigInt
 
   "withdrawn (expressed in TO token). needed to calculate toWithdraw."
