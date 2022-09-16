@@ -70,6 +70,8 @@ type Position @entity {
   toWithdraw: BigInt!
   "accumulator of the swapped underlying. helps to get yield generated of swapped."
   accumSwappedUnderlying: BigInt
+  "accum of the swapped that has not been withdrawn, in terms of the underlying. calculated at the moment of the swap"
+  toWithdrawUnderlyingAccum: BigInt
 
   "withdrawn (expressed in TO token). needed to calculate toWithdraw."
   withdrawn: BigInt!
