@@ -45,8 +45,8 @@ export function create(event: Deposited, transaction: Transaction): Position {
       position.depositedRateUnderlying = tokenLibrary.transformYieldBearingSharesToUnderlying(event.params.fromToken, event.params.rate);
     }
     if (to.type == 'YIELD_BEARING_SHARE') {
-      position.accumSwappedUnderlying = ZERO_BI;
       position.toWithdrawUnderlyingAccum = ZERO_BI;
+      position.totalSwappedUnderlyingAccum = ZERO_BI;
     }
 
     position.totalWithdrawn = ZERO_BI;
@@ -247,7 +247,7 @@ export function registerPairSwap(positionId: string, pair: Pair, pairSwap: PairS
 
   position.toWithdraw = totalSwapped.minus(position.withdrawn);
   if (to.type == 'YIELD_BEARING_SHARE') {
-    position.accumSwappedUnderlying = position.accumSwappedUnderlying!.plus(
+    position.totalSwappedUnderlyingAccum = position.totalSwappedUnderlyingAccum!.plus(
       tokenLibrary.transformYieldBearingSharesToUnderlying(Address.fromString(position.to), swapped)
     );
     position.toWithdrawUnderlyingAccum = position.toWithdrawUnderlyingAccum!.plus(
