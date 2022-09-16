@@ -3,7 +3,7 @@ import { Token } from '../../generated/schema';
 import { ERC20 } from '../../generated/Hub/ERC20';
 import { Transformer, Transformer__calculateTransformToUnderlyingResultValue0Struct } from '../../generated/Hub/Transformer';
 import { TransformerRegistry } from '../../generated/Hub/TransformerRegistry';
-import { PROTOCOL_TOKEN_ADDRESS } from './constants';
+import { ADDRESS_ZERO, PROTOCOL_TOKEN_ADDRESS } from './constants';
 
 export const TRANSFORMER_REGISTRY_ADDRESS = Address.fromString('0xa57C9aCD776d8f96Fcf99fA9559B5d2f1c022925');
 // WETH / WMATIC / ETC
@@ -80,9 +80,9 @@ export function createProtocolToken(): Token {
 }
 
 export function getTokenTypeAndTransformerAddress(tokenAddress: Address): TokenTypeAndTransformerAddress {
-  const transformerAddress = getTransformerAddress(tokenAddress)[0];
-  const tokenType = getTokenTypeByTransformerAddress(transformerAddress);
-  return new TokenTypeAndTransformerAddress(tokenType, transformerAddress);
+  // const transformerAddress = getTransformerAddress(tokenAddress)[0];
+  // const tokenType = getTokenTypeByTransformerAddress(transformerAddress);
+  return new TokenTypeAndTransformerAddress('BASE', ADDRESS_ZERO);
 }
 
 export function getTransformerAddress(dependantTokenAddress: Address): Address[] {
