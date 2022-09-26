@@ -9,12 +9,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        networks:
-          [
-            { name: "arbitrum", deploy-script: "arbitrum" },
-            { name: "optimism", deploy-script: "optimism" },
-            { name: "polygon", deploy-script: "polygon" },
-          ]
+        networks: [{ name: "optimism", deploy-script: "optimism" }]
     steps:
       - name: Check out github repository
         uses: actions/checkout@v2

@@ -8,9 +8,7 @@ on:
         required: true
         type: choice
         options:
-          - "arbitrum"
           - "optimism"
-          - "polygon"
 
 jobs:
   deploy:
