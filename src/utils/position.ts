@@ -13,8 +13,8 @@ import { ONE_BI, ZERO_BI } from './constants';
 export function create(event: Deposited, transaction: Transaction): Position {
   const id = event.params.positionId.toString();
   log.info('[Position] Create {}', [id]);
-  const from = tokenLibrary.getByAddress(event.params.fromToken);
-  const to = tokenLibrary.getByAddress(event.params.toToken);
+  const from = tokenLibrary.getOrCreate(event.params.fromToken, true);
+  const to = tokenLibrary.getOrCreate(event.params.toToken, true);
   const pairId = pairLibrary.buildId(from.id, to.id);
   let pair = pairLibrary.get(pairId);
   if (pair == null) {
