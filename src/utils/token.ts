@@ -5,14 +5,13 @@ import { Transformer, Transformer__calculateTransformToUnderlyingResultValue0Str
 import { TransformerRegistry } from '../../generated/Hub/TransformerRegistry';
 import { PROTOCOL_TOKEN_ADDRESS } from './constants';
 
-export const TRANSFORMER_REGISTRY_ADDRESS = Address.fromString('0xa57C9aCD776d8f96Fcf99fA9559B5d2f1c022925');
+export const TRANSFORMER_REGISTRY_ADDRESS = Address.fromString('0xC0136591Df365611B1452B5F8823dEF69Ff3A685');
 // WETH / WMATIC / ETC
-export const PROTOCOL_TOKEN_WRAPPER_TRANSFORMER_ADDRESS = Address.fromString('0x70fB4b2f99d22dB5B7D1691c4430EEAaE3bB166D');
+export const PROTOCOL_TOKEN_WRAPPER_TRANSFORMER_ADDRESS = Address.fromString('0xfd55b5A6F61f22c70f4A1d8e63d181c6D0a290c6');
 // Yield bearing shares is a more human way of referring to 4626 transformer.
-export const YIELD_BEARING_SHARE_TRANSFORMER_ADDRESS = Address.fromString('0xe073b2a7736E581A5ea33152D64Adc374d707F97');
+export const YIELD_BEARING_SHARE_TRANSFORMER_ADDRESS = Address.fromString('0x7CbdcA3c992953bdd536BE234973686D758DAabc');
 
 export function getById(id: string): Token {
-  log.info('[Token] Get {}', [id]);
   const token = Token.load(id);
   if (token == null) throw Error('Token not found');
   return token;
