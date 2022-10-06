@@ -334,6 +334,8 @@ type CreatedAction implements PositionActionInterface @entity {
 
   "rate"
   rate: BigInt!
+  "Distributed share value (optional, only if type is a yield-bearing-share)"
+  rateUnderlying: BigInt
   "remaining swaps"
   remainingSwaps: BigInt!
   "permissions set"
