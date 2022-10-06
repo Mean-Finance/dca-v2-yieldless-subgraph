@@ -58,7 +58,15 @@ export function create(event: Deposited, transaction: Transaction): Position {
     position.createdAtTimestamp = transaction.timestamp;
 
     // Create position action
-    positionActionLibrary.create(id, event.params.rate, event.params.startingSwap, event.params.lastSwap, position.permissions, transaction);
+    positionActionLibrary.create(
+      id,
+      event.params.rate,
+      position.depositedRateUnderlying,
+      event.params.startingSwap,
+      event.params.lastSwap,
+      position.permissions,
+      transaction
+    );
 
     position.totalDeposited = event.params.rate.times(position.remainingSwaps);
     position.totalSwaps = position.remainingSwaps;
@@ -104,7 +112,7 @@ export function modified(event: Modified, transaction: Transaction): Position {
   if (from.type == 'YIELD_BEARING_SHARE') {
     const changeInAmount = event.params.rate.times(position.remainingSwaps).minus(previousPositionRate.times(previousRemainingSwaps));
     if (changeInAmount.gt(ZERO_BI)) {
-      const previousTotalUnderlyingRemaining = position.depositedRateUnderlying!.times(position.remainingSwaps);
+      const previousTotalUnderlyingRemaining = position.depositedRateUnderlying!.times(previousRemainingSwaps);
       const underlyingValueOfIncreasedAmount = tokenLibrary.transformYieldBearingSharesToUnderlying(
         Address.fromString(position.from),
         changeInAmount
