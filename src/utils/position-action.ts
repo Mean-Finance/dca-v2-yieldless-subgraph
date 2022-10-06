@@ -17,6 +17,7 @@ import * as tokenLibrary from '../utils/token';
 export function create(
   positionId: string,
   rate: BigInt,
+  rateUnderlying: BigInt | null,
   startingSwap: BigInt,
   lastSwap: BigInt,
   permissions: string[],
@@ -32,6 +33,7 @@ export function create(
     positionAction.actor = transaction.from;
 
     positionAction.rate = rate;
+    positionAction.rateUnderlying = rateUnderlying;
     positionAction.remainingSwaps = lastSwap.minus(startingSwap).plus(ONE_BI);
     positionAction.permissions = permissions;
 
