@@ -2,7 +2,10 @@ import { Address, log, BigInt, dataSource } from '@graphprotocol/graph-ts';
 import { Token } from '../../generated/schema';
 import { ERC20 } from '../../generated/Hub/ERC20';
 import { Transformer, Transformer__calculateTransformToUnderlyingResultValue0Struct } from '../../generated/Hub/Transformer';
-import { TransformerRegistry } from '../../generated/Hub/TransformerRegistry';
+import {
+  TransformerRegistry,
+  TransformerRegistry__calculateTransformToUnderlyingResultValue0Struct,
+} from '../../generated/Hub/TransformerRegistry';
 import { PROTOCOL_TOKEN_ADDRESS } from './constants';
 
 export const TRANSFORMER_REGISTRY_ADDRESS = Address.fromString('0xC0136591Df365611B1452B5F8823dEF69Ff3A685');
@@ -114,9 +117,9 @@ export function getUnderlyingTokenIds(transformerAddress: Address, dependantToke
 export function transformToUnderlying(
   dependantAddress: Address,
   amount: BigInt
-): Array<Transformer__calculateTransformToUnderlyingResultValue0Struct> {
-  const transformer = Transformer.bind(getTransformerAddress(dependantAddress)[0]);
-  return transformer.calculateTransformToUnderlying(dependantAddress, amount);
+): Array<TransformerRegistry__calculateTransformToUnderlyingResultValue0Struct> {
+  const transformerRegistry = TransformerRegistry.bind(TRANSFORMER_REGISTRY_ADDRESS);
+  return transformerRegistry.calculateTransformToUnderlying(dependantAddress, amount);
 }
 
 export function transformYieldBearingSharesToUnderlying(dependantTokenAddress: Address, amount: BigInt): BigInt {
