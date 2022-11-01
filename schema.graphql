@@ -137,12 +137,20 @@ type PairSwap @entity {
   pairSwapsIntervals: [PairSwapInterval!]! @derivedFrom(field: "pairSwap")
   "ratio unit b to a"
   ratioBToA: BigInt!
+  "ratio underlying unit b to a"
+  ratioUnderlyingBToA: BigInt
   "ratio unit b to a with fee subtracted"
   ratioBToAWithFee: BigInt!
+  "ratio underlying unit b to a with fee subtracted"
+  ratioUnderlyingBToAWithFee: BigInt
   "ratio unit a to b"
   ratioAToB: BigInt!
+  "ratio underlying unit a to b"
+  ratioUnderlyingAToB: BigInt
   "ratio unit a to b with fee subtracted"
   ratioAToBWithFee: BigInt!
+  "ratio underlying unit a to b with fee subtracted"
+  ratioUnderlyingAToBWithFee: BigInt
   "executed with transaction"
   transaction: Transaction!
   "executed at block number"
@@ -271,6 +279,8 @@ type SwappedAction implements PositionActionInterface @entity {
   id: ID!
   "position"
   position: Position!
+  "pair swap"
+  pairSwap: PairSwap!
   "action that caused the modification"
   action: ACTION!
   "actor who executed the action"
@@ -286,11 +296,6 @@ type SwappedAction implements PositionActionInterface @entity {
   depositedRateUnderlying: BigInt
   "Current rate in underlying token (optional, only if type is a yield-bearing-share)"
   rateUnderlying: BigInt
-
-  "ratio unit b to a with fee subtracted"
-  ratioBToAWithFee: BigInt!
-  "ratio unit a to b with fee subtracted"
-  ratioAToBWithFee: BigInt!
 
   "transaction"
   transaction: Transaction!
