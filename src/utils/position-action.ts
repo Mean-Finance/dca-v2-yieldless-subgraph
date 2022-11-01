@@ -206,14 +206,12 @@ export function swapped(position: Position, swapped: BigInt, rate: BigInt, pairS
   if (positionAction == null) {
     positionAction = new SwappedAction(id);
     positionAction.position = position.id;
+    positionAction.pairSwap = pairSwap.id;
     positionAction.action = 'SWAPPED';
     positionAction.actor = transaction.from;
 
     positionAction.rate = rate;
     positionAction.swapped = swapped;
-
-    positionAction.ratioAToBWithFee = pairSwap.ratioAToBWithFee;
-    positionAction.ratioBToAWithFee = pairSwap.ratioBToAWithFee;
 
     // Check yield-bearing-share on from
     if (from.type == 'YIELD_BEARING_SHARE') {
