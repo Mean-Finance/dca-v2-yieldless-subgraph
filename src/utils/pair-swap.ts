@@ -36,39 +36,44 @@ export function create(pair: Pair, event: SwappedSwapInformationPairsStruct, tra
     }
 
     /**
-     * Definitions
+     * tokenA = waWBTC
+     * tokenB = waUSDC
+     *
+     * magnitudeTokenA waWBTC = underlyingPerTokenA WBTC
+     * => magnitudeTokenA/underlyingPerTokenA waWBTC = 1 WBTC
+     * => magnitudeTokenA*magnitudeTokenA/underlyingPerTokenA waWBTC = magnitudeTokenA WBTC
+     * magnitudeTokenA waWBTC = ratioAToB waUSDC
+     * magnitudeTokenB waUSDC = underlyingPerTokenB USDC
+     *   => 1 waUSDC = underlyingPerTokenB/magnitudeTokenB USDC
+     *   => ratioAToB waUSDC = ratioAToB*underlyingPerTokenB/magnitudeTokenB USDC
+     *
+     *
+     * magnitudeTokenA WBTC = magnitudeTokenA*magnitudeTokenA/underlyingPerTokenA waWBTC
+     *         = magnitudeTokenA/underlyingPerTokenA * ratioAToB waUSDC
+     *         = magnitudeTokenA/underlyingPerTokenA * ratioAToB*underlyingPerTokenB/magnitudeTokenB USDC
+     *         = magnitudeTokenA * ratioAToB * underlyingPerTokenB / (underlyingPerTokenA * magnitudeTokenB) USDC
+     *           = magnitudeTokenA * ratioAToB * underlyingPerTokenB / (underlyingPerTokenA * magnitudeTokenB) USDC
+     *
+     * underlyingRatioAToB = magnitudeTokenA * ratioAToB * underlyingPerTokenB / (underlyingPerTokenA * magnitudeTokenB)
      */
 
-    // convertToUnderlying(amountOfShares, underlyingPerShare, sharesMagnitude)
-    // sharesMagnitude  ---- underlyingPerShare
-    // amountOfShares   ---- X
-    // X = amountOfShares * underlyingPerShare / sharesMagnitude
+    pairSwap.ratioUnderlyingBToA = tokenB.magnitude
+      .times(pairSwap.ratioBToA)
+      .times(underlyingPerTokenA)
+      .div(underlyingPerTokenB.times(tokenA.magnitude));
+    pairSwap.ratioUnderlyingBToAWithFee = tokenB.magnitude
+      .times(pairSwap.ratioBToAWithFee)
+      .times(underlyingPerTokenA)
+      .div(underlyingPerTokenB.times(tokenA.magnitude));
 
-    /**
-     * Example
-     * Ratio B to A represents the amount of A received by one B
-     */
-    // B Shares     = 1540  ----- 1 A Share
-    // B Underlying = 1580  ----- 1.05 A Underlying
-    // B Underlying = X     ----- 1 A Underlying
-    // X = 1 * 1580 / 1.05 = 1 * converToUnderlying(ratioBToA, UPSB, MAGNITUDE_B) / convertToUnderlying(MAGNITUDE_A, UPSA, MAGNITUDE_A)
-
-    // => X = MAGNITUDE_A * [RATIO_B_TO_A * UNDERLYING_PER_TOKEN_B / MAGNITUDE_B] / [MAGNITUDE_A * UNDERLYING_PER_TOKEN_A / MAGNITUDE_A]
-    // => X = MAGNITUDE_A * [RATIO_B_TO_A * UNDERLYING_PER_TOKEN_B / MAGNITUDE_B] / UNDERLYING_PER_TOKEN_A]
-
-    pairSwap.ratioUnderlyingBToA = tokenA.magnitude
-      .times(pairSwap.ratioBToA.times(underlyingPerTokenB).div(tokenB.magnitude))
-      .div(underlyingPerTokenA);
-    pairSwap.ratioUnderlyingBToAWithFee = tokenA.magnitude
-      .times(pairSwap.ratioBToAWithFee.times(underlyingPerTokenB).div(tokenB.magnitude))
-      .div(underlyingPerTokenA);
-
-    pairSwap.ratioUnderlyingAToB = tokenB.magnitude
-      .times(pairSwap.ratioAToB.times(underlyingPerTokenA).div(tokenA.magnitude))
-      .div(underlyingPerTokenB);
-    pairSwap.ratioUnderlyingAToBWithFee = tokenB.magnitude
-      .times(pairSwap.ratioAToBWithFee.times(underlyingPerTokenA).div(tokenA.magnitude))
-      .div(underlyingPerTokenB);
+    pairSwap.ratioUnderlyingAToB = tokenA.magnitude
+      .times(pairSwap.ratioAToB)
+      .times(underlyingPerTokenB)
+      .div(underlyingPerTokenA.times(tokenB.magnitude));
+    pairSwap.ratioUnderlyingAToBWithFee = tokenA.magnitude
+      .times(pairSwap.ratioAToBWithFee)
+      .times(underlyingPerTokenB)
+      .div(underlyingPerTokenA.times(tokenB.magnitude));
 
     pairSwap.transaction = transaction.id;
     pairSwap.executedAtBlock = transaction.blockNumber;
