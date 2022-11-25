@@ -11,6 +11,7 @@ jobs:
       matrix:
         networks:
           [
+            { name: "ethereum", deploy-script: "ethereum" },
             { name: "arbitrum", deploy-script: "arbitrum" },
             { name: "optimism", deploy-script: "optimism" },
             { name: "polygon", deploy-script: "polygon" },
