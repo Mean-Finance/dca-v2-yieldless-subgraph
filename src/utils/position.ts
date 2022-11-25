@@ -120,9 +120,14 @@ export function modified(event: Modified, transaction: Transaction): Position {
       const newTotalUnderlying = previousTotalUnderlyingRemaining.plus(underlyingValueOfIncreasedAmount);
       // underlyingRate = (underlyingRate * remainingSwaps + toUnderlying(increaseAmount)) / newSwaps
       position.depositedRateUnderlying = newTotalUnderlying.div(position.remainingSwaps);
-    } else {
+    } else if (previousPositionRate.gt(ZERO_BI)) {
       // underlyingRate = (newRate * underlyingRate) / oldRate
       position.depositedRateUnderlying = event.params.rate.times(position.depositedRateUnderlying!).div(previousPositionRate);
+    } else {
+      position.depositedRateUnderlying = tokenLibrary.transformYieldBearingSharesToUnderlying(
+        Address.fromString(position.from),
+        event.params.rate
+      );
     }
   }
 
