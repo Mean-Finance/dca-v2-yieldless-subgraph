@@ -1,7 +1,7 @@
 import { Address, log, BigInt, dataSource } from '@graphprotocol/graph-ts';
 import { Token } from '../../generated/schema';
 import { ERC20 } from '../../generated/Hub/ERC20';
-import { Transformer, Transformer__calculateTransformToUnderlyingResultValue0Struct } from '../../generated/Hub/Transformer';
+import { Transformer } from '../../generated/Hub/Transformer';
 import {
   TransformerRegistry,
   TransformerRegistry__calculateTransformToUnderlyingResultValue0Struct,
