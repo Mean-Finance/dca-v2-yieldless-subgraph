@@ -1,6 +1,8 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 schema:
   file: ./schema.graphql
+features:
+  - nonFatalErrors
 dataSources:
   - kind: ethereum/contract
     name: PermissionsManager
@@ -11,7 +13,7 @@ dataSources:
       abi: PermissionsManager
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./src/mappings/permissionsManager.ts
       entities:
@@ -40,7 +42,7 @@ dataSources:
       abi: Hub
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./src/mappings/hub.ts
       entities:
