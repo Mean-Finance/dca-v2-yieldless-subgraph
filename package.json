@@ -20,13 +20,19 @@
     "build:optimism": "yarn prepare:optimism && yarn codegen",
     "build:polygon": "yarn prepare:polygon && yarn codegen",
     "codegen": "rm -rf generated && graph codegen",
+    "create:ethereum:local": "graph create mean-finance/dca-v2-yf-ethereum --node http://127.0.0.1:8020",
+    "create:optimism:local": "graph create mean-finance/dca-v2-yf-optimism --node http://127.0.0.1:8020",
+    "create:polygon:local": "graph create mean-finance/dca-v2-yf-polygon --node http://127.0.0.1:8020",
     "deploy:arbitrum": "yarn build:arbitrum && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-yf-arbitrum-canary",
     "deploy:arbitrum:stable": "yarn build:arbitrum && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-yf-arbitrum",
     "deploy:ethereum": "yarn build:ethereum && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-yf-ethereum-canary",
+    "deploy:ethereum:local": "yarn build:ethereum && graph deploy --debug --node http://127.0.0.1:8020 --ipfs http://127.0.0.1:5001 mean-finance/dca-v2-yf-ethereum",
     "deploy:ethereum:stable": "yarn build:ethereum && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-yf-ethereum",
     "deploy:optimism": "yarn build:optimism && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-yf-optimism-canary",
+    "deploy:optimism:local": "yarn build:optimism && graph deploy --debug --node http://127.0.0.1:8020 --ipfs http://127.0.0.1:5001 mean-finance/dca-v2-yf-optimism",
     "deploy:optimism:stable": "yarn build:optimism && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-yf-optimism",
     "deploy:polygon": "yarn build:polygon && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-yf-polygon-canary",
+    "deploy:polygon:local": "yarn build:polygon && graph deploy --debug --node http://127.0.0.1:8020 --ipfs http://127.0.0.1:5001 mean-finance/dca-v2-yf-polygon",
     "deploy:polygon:stable": "yarn build:polygon && graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ mean-finance/dca-v2-yf-polygon",
     "lint:check": "prettier --check './**'",
     "lint:fix": "sort-package-json && prettier --write './**'",
@@ -39,18 +45,18 @@
     "test": "graph test"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.33.1",
-    "@graphprotocol/graph-ts": "0.27.0",
+    "@graphprotocol/graph-cli": "0.37.0",
+    "@graphprotocol/graph-ts": "0.29.3",
     "mustache": "4.2.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.1.2",
-    "@commitlint/config-conventional": "17.1.0",
-    "husky": "8.0.1",
-    "matchstick-as": "0.5.0",
+    "@commitlint/cli": "17.4.4",
+    "@commitlint/config-conventional": "17.4.4",
+    "husky": "8.0.3",
+    "matchstick-as": "0.5.1",
     "pinst": "3.0.0",
-    "prettier": "2.7.1",
-    "sort-package-json": "1.57.0",
+    "prettier": "2.8.4",
+    "sort-package-json": "2.4.1",
     "standard-version": "9.5.0"
   }
 }
