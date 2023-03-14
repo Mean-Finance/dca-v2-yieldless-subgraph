@@ -1,4 +1,4 @@
-import { Address, log, BigInt, dataSource } from '@graphprotocol/graph-ts';
+import { Address, log, BigInt, dataSource, ethereum } from '@graphprotocol/graph-ts';
 import { Token } from '../../generated/schema';
 import { ERC20 } from '../../generated/Hub/ERC20';
 import { Transformer } from '../../generated/Hub/Transformer';
@@ -15,7 +15,6 @@ export const PROTOCOL_TOKEN_WRAPPER_TRANSFORMER_ADDRESS = Address.fromString('0x
 export const YIELD_BEARING_SHARE_TRANSFORMER_ADDRESS = Address.fromString('0xe073b2a7736E581A5ea33152D64Adc374d707F97');
 
 export function getById(id: string): Token {
-  log.info('[Token] Get {}', [id]);
   const token = Token.load(id);
   if (token == null) throw Error('Token not found');
   return token;
@@ -35,9 +34,27 @@ export function getOrCreate(tokenAddress: Address, allowed: boolean): Token {
     } else {
       token = new Token(id);
       const erc20Contract = ERC20.bind(tokenAddress);
-      token.name = erc20Contract.name();
-      token.symbol = erc20Contract.symbol();
-      token.decimals = erc20Contract.decimals();
+      const name = erc20Contract.try_name();
+      if (name.reverted) {
+        log.error('[Tokens] Call reverted while trying to get name of token {}', [tokenAddress.toHexString()]);
+        token.name = 'TBD';
+      } else {
+        token.name = name.value;
+      }
+      const symbol = erc20Contract.try_symbol();
+      if (symbol.reverted) {
+        log.error('[Tokens] Call reverted while trying to get symbol of token {}', [tokenAddress.toHexString()]);
+        token.symbol = 'TBD';
+      } else {
+        token.symbol = symbol.value;
+      }
+      const decimals = erc20Contract.try_decimals();
+      if (decimals.reverted) {
+        log.error('[Tokens] Call reverted while trying to get decimals of token {}', [tokenAddress.toHexString()]);
+        token.decimals = 18;
+      } else {
+        token.decimals = decimals.value;
+      }
       token.magnitude = BigInt.fromI32(10).pow(erc20Contract.decimals() as u8);
       token.allowed = allowed;
 
