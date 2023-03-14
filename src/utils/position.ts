@@ -47,6 +47,7 @@ export function create(event: Deposited, transaction: Transaction): Position {
     if (to.type == 'YIELD_BEARING_SHARE') {
       position.toWithdrawUnderlyingAccum = ZERO_BI;
       position.totalSwappedUnderlyingAccum = ZERO_BI;
+      position.totalWithdrawnUnderlying = ZERO_BI;
     }
 
     position.totalWithdrawn = ZERO_BI;
@@ -187,10 +188,11 @@ export function terminated(event: Terminated, transaction: Transaction): Positio
   const id = event.params.positionId.toString();
   log.info('[Position] Terminated {}', [id]);
   const position = getById(id);
+  const to = tokenLibrary.getById(position.to);
 
   // Auxiliar previous position values
-  const previousRemainingLiquidity = position.remainingLiquidity;
   const previousToWithdraw = position.toWithdraw;
+  const previousRemainingLiquidity = position.remainingLiquidity;
 
   position.rate = ZERO_BI;
   position.remainingSwaps = ZERO_BI;
@@ -198,6 +200,13 @@ export function terminated(event: Terminated, transaction: Transaction): Positio
   position.toWithdraw = ZERO_BI;
   position.withdrawn = position.withdrawn.plus(position.toWithdraw);
   position.status = 'TERMINATED';
+
+  if (to.type == 'YIELD_BEARING_SHARE') {
+    position.toWithdrawUnderlyingAccum = ZERO_BI;
+    position.totalWithdrawnUnderlying = position.totalWithdrawnUnderlying!.plus(
+      tokenLibrary.transformYieldBearingSharesToUnderlying(Address.fromString(position.to), previousToWithdraw)
+    );
+  }
 
   position.terminatedAtBlock = transaction.blockNumber;
   position.terminatedAtTimestamp = transaction.timestamp;
@@ -226,6 +235,9 @@ export function withdrew(positionId: string, transaction: Transaction): Position
   position.totalWithdrawn = position.totalWithdrawn.plus(previousToWithdraw);
   if (to.type == 'YIELD_BEARING_SHARE') {
     position.toWithdrawUnderlyingAccum = ZERO_BI;
+    position.totalWithdrawnUnderlying = position.totalWithdrawnUnderlying!.plus(
+      tokenLibrary.transformYieldBearingSharesToUnderlying(Address.fromString(position.to), previousToWithdraw)
+    );
   }
   position.save();
   //
