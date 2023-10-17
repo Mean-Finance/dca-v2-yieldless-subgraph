@@ -15,7 +15,8 @@ import {
   Withdrew,
   WithdrewMany,
 } from '../../generated/Hub/Hub';
-import { BigInt, log } from '@graphprotocol/graph-ts';
+import { BigInt, dataSource } from '@graphprotocol/graph-ts';
+import { Token } from '../../generated/schema';
 
 export function handleSetAllowedTokens(event: TokensAllowedUpdated): void {
   transactionLibrary.getOrCreateFromEvent(event, 'Hub-TokensAllowedUpdated');
@@ -77,4 +78,39 @@ export function dirtyInitialization(event: RoleAdminChanged): void {
   swapIntervalsLibrary.getOrCreate(BigInt.fromString('14400'), true);
   swapIntervalsLibrary.getOrCreate(BigInt.fromString('86400'), true);
   swapIntervalsLibrary.getOrCreate(BigInt.fromString('604800'), true);
+  if (dataSource.network() == 'matic') {
+    const bridgedUSDC = new Token('0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
+    bridgedUSDC.name = 'Bridged USDC';
+    bridgedUSDC.symbol = 'USDC.e';
+    bridgedUSDC.decimals = 6;
+    bridgedUSDC.type = 'BASE';
+    bridgedUSDC.allowed = true;
+    bridgedUSDC.magnitude = BigInt.fromI32(10).pow(6);
+    bridgedUSDC.save();
+    const nativeUSDC = new Token('0x3c499c542cef5e3811e1192ce70d8cc03d5c3359');
+    nativeUSDC.name = 'USD Coin';
+    nativeUSDC.symbol = 'USDC';
+    nativeUSDC.decimals = 6;
+    nativeUSDC.type = 'BASE';
+    nativeUSDC.allowed = true;
+    nativeUSDC.magnitude = BigInt.fromI32(10).pow(6);
+    nativeUSDC.save();
+  } else if (dataSource.network() == 'optimism') {
+    const bridgedUSDC = new Token('0x7f5c764cbc14f9669b88837ca1490cca17c31607');
+    bridgedUSDC.name = 'Bridged USDC';
+    bridgedUSDC.symbol = 'USDC.e';
+    bridgedUSDC.decimals = 6;
+    bridgedUSDC.type = 'BASE';
+    bridgedUSDC.allowed = true;
+    bridgedUSDC.magnitude = BigInt.fromI32(10).pow(6);
+    bridgedUSDC.save();
+    const nativeUSDC = new Token('0x0b2c639c533813f4aa9d7837caf62653d097ff85');
+    nativeUSDC.name = 'USD Coin';
+    nativeUSDC.symbol = 'USDC';
+    nativeUSDC.decimals = 6;
+    nativeUSDC.type = 'BASE';
+    nativeUSDC.allowed = true;
+    nativeUSDC.magnitude = BigInt.fromI32(10).pow(6);
+    nativeUSDC.save();
+  }
 }
