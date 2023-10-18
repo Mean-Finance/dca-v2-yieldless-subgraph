@@ -134,7 +134,7 @@ export function getUnderlyingTokenIds(transformerAddress: Address, dependantToke
 
 export function transformToUnderlying(
   dependantAddress: Address,
-  amount: BigInt
+  amount: BigInt,
 ): Array<TransformerRegistry__calculateTransformToUnderlyingResultValue0Struct> {
   const transformerRegistry = TransformerRegistry.bind(TRANSFORMER_REGISTRY_ADDRESS);
   return transformerRegistry.calculateTransformToUnderlying(dependantAddress, amount);
